@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency_list">
+        <item>€</item>
+        <item>$</item>
+        <item>M</item>
+    </string-array>
+
+    <string-array name="currency_list_values">
+        <item>€</item>
+        <item>$</item>
+        <item>M</item>
+    </string-array>
+</resources>

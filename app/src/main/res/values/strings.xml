@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Buch App!</string>
+
+    <string name="game_add_dialog_title">New Game</string>
+    <string name="game_add_dialog_pos_title">Done</string>
+    <string name="game_add_dialog_neg_title">Exit</string>
+    <string name="game_add_dialog_game_title">Game Name</string>
+    <string name="game_add_dialog_game_player">Player %1$d</string>
+
+
+    <string name="game_list_options_dialog_title">Options</string>
+    <string-array name="game_list_options_dialog">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+
+
+    <string name="game_list_remove_dialog_title">%1$s delete</string>
+    <string name="game_list_remove_dialog_message">Do you really want to delete \" %1$s \" ?</string>
+    <string name="game_list_remove_dialog_pos_title">Yes</string>
+    <string name="game_list_remove_dialog_neg_title">No</string>
+    <string name="game_list_preview_playercount">%1$d Players</string>
+
+
+    <string name="error_message_game_add_dialog">Issue(s) in inputs! Game Name/Player is not entered!</string>
+    <string name="game_rent_transfer_dialog_title">Pay Rent To...</string>
+    <string name="game_rent_amount_dialog_title">Rent Amount</string>
+    <string name="game_pay_amount_dialog_factor1">Thousand</string>
+    <string name="game_pay_amount_dialog_factor2">Million</string>
+    <string name="game_rent_amount_dialog_pos_title">Pay</string>
+    <string name="game_transfer_money_dialog_title_amount">Money Transfer \(to %1$d Players\)</string>
+    <string name="game_transfer_money_dialog_title">Money Transfer</string>
+    <string name="game_transfer_money_dialog_pos_title">Select</string>
+    <string name="game_transfer_money_dialog_neg_title">Exit</string>
+    <string name="info_game_list_empty">No games available!</string>
+    <string name="action_game_list_empty">New</string>
+    <string name="menu_item_settings_title">Settings</string>
+    <string name="activity_settings_name">Settings</string>
+    <string name="preference_go_money_title">Go! Money</string>
+    <string name="preference_go_money_summary">Defines the amount of money a player gets when crossing Go!</string>
+    <string name="preference_go_flag_title">Double Go! Money</string>
+    <string name="preference_go_flag_summary">A player gets the double amount of money when directly hitting Go! Notice: Hold the Go! Button long to archieve this!</string>
+    <string name="preference_currency_title">Currency</string>
+    <string name="preference_currency_summary">Sets the default currency to display the balances in</string>
+    <string name="preference_default_balance_summary">The balance of a player to start with</string>
+    <string name="preference_default_balance_title">Default Start Balance</string>
+    <string name="info_player_balance_zero">No balance left to pay anything!</string>
+    <string name="action_player_balance_zero">Manage</string>
+    <string name="game_go_money_accept_dialog_message">Do you want to add %1$s to %2$s balance?</string>
+    <string name="game_go_money_accept_dialog_pos_title">Yes</string>
+    <string name="game_go_money_accept_dialog_neg_title">No</string>
+    <string name="game_go_money_accept_dialog_title">Go! Money</string>
+
+</resources>

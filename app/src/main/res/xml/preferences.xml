@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:title="@string/preference_default_balance_title"
+        android:summary="@string/preference_default_balance_summary"
+        android:inputType="number"
+        android:key="preference_default_balance_key"
+        android:defaultValue="15000000"/>
+
+    <EditTextPreference
+        android:title="@string/preference_go_money_title"
+        android:summary="@string/preference_go_money_summary"
+        android:inputType="number"
+        android:key="preference_go_money_key"
+        android:defaultValue="2000000"/>
+
+    <CheckBoxPreference
+        android:title="@string/preference_go_flag_title"
+        android:summary="@string/preference_go_flag_summary"
+        android:defaultValue="true"
+        android:key="preference_go_flag_key" />
+
+    <ListPreference
+        android:title="@string/preference_currency_title"
+        android:summary="@string/preference_currency_summary"
+        android:key="preference_currency_key"
+        android:defaultValue="1"
+        android:entries="@array/currency_list"
+        android:entryValues="@array/currency_list_values" />
+
+</PreferenceScreen>

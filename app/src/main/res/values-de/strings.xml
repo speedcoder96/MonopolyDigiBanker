@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Buch App!</string>
+
+
+    <string name="game_add_dialog_title">Neues Spiel</string>
+    <string name="game_add_dialog_pos_title">Fertig</string>
+    <string name="game_add_dialog_neg_title">Abbrechen</string>
+    <string name="game_add_dialog_game_title">Spielname</string>
+    <string name="game_add_dialog_game_player">Spieler %1$d</string>
+
+
+    <string name="game_list_options_dialog_title">Optionen</string>
+    <string-array name="game_list_options_dialog">
+        <item>Bearbeiten</item>
+        <item>Entfernen</item>
+    </string-array>
+
+
+    <string name="game_list_remove_dialog_title">%1$s entfernen</string>
+    <string name="game_list_remove_dialog_message">Wollen Sie \" %1$s \" wirklich entfernen?</string>
+    <string name="game_list_remove_dialog_pos_title">Ja</string>
+    <string name="game_list_remove_dialog_neg_title">Nein</string>
+    <string name="game_list_preview_playercount">%1$d Mitspieler</string>
+
+    <string name="error_message_game_add_dialog">Fehler bei Eingaben! Spielname/Spieler nicht ausgefüllt!</string>
+    <string name="game_rent_transfer_dialog_title">Miete zahlen an...</string>
+    <string name="game_rent_amount_dialog_title">Miethöhe</string>
+    <string name="game_pay_amount_dialog_factor1">Tausend</string>
+    <string name="game_pay_amount_dialog_factor2">Millionen</string>
+    <string name="game_rent_amount_dialog_pos_title">Bezahlen</string>
+    <string name="game_transfer_money_dialog_title_amount">Geldtransfer (an %1$d Spieler) </string>
+    <string name="game_transfer_money_dialog_pos_title">Auswählen</string>
+    <string name="game_transfer_money_dialog_neg_title">Abbrechen</string>
+    <string name="info_game_list_empty">Keine Spiele vorhanden!</string>
+    <string name="action_game_list_empty">Neu</string>
+    <string name="menu_item_settings_title">Einstellungen</string>
+    <string name="activity_settings_name">Einstellungen</string>
+    <string name="preference_go_money_title">LOS! Geld</string>
+    <string name="preference_go_money_summary">Geldbetrag fürs über Los! gehen</string>
+    <string name="preference_go_flag_title">Doppelter LOS! - Betrag</string>
+    <string name="preference_go_flag_summary">Der Spieler bekommt den doppelten LOS! - Betrag, wenn er direkt auf LOS! gelangt. Bemerkung: Halte den LOS! Knopf gedrückt, um dies zu erreichen!</string>
+    <string name="preference_currency_title">Währung</string>
+    <string name="preference_currency_summary">Setzt die Standardwährung in der die Beträge angezeigt werden</string>
+    <string name="preference_default_balance_summary">Kapital eines Spielers zum Start des Spiels</string>
+    <string name="preference_default_balance_title">Startkapital</string>
+    <string name="info_player_balance_zero">Sie haben kein Geld mehr!</string>
+    <string name="action_player_balance_zero">Geldmanagement</string>
+    <string name="game_go_money_accept_dialog_message">Wollen Sie wirklich %1$s auf das Konto von %2$s packen?</string>
+    <string name="game_go_money_accept_dialog_pos_title">Ja</string>
+    <string name="game_go_money_accept_dialog_neg_title">Nein</string>
+    <string name="game_go_money_accept_dialog_title">LOS! Geld</string>
+    <string name="game_transfer_money_dialog_title">Geldtransfer</string>
+
+</resources>
