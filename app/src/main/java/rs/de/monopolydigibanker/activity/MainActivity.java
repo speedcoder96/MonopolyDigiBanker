@@ -19,22 +19,20 @@ import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.adapter.GameListViewAdapter;
 import rs.de.monopolydigibanker.database.DatabaseSource;
 import rs.de.monopolydigibanker.dialog.GameAddDialog;
+import rs.de.monopolydigibanker.dialog.GameEditDialog;
 import rs.de.monopolydigibanker.dialog.GameOptionsDialog;
 import rs.de.monopolydigibanker.dialog.GameRemoveDialog;
 
 public class MainActivity extends AppCompatActivity implements
         GameAddDialog.OnAddListener, View.OnClickListener, View.OnLongClickListener,
-        GameRemoveDialog.OnRemoveListener, GameOptionsDialog.OnOptionSelectionListener {
-
-    private ListView gamesListView;
-    private FloatingActionButton gamesAddFab;
+        GameRemoveDialog.OnRemoveListener, GameOptionsDialog.OnOptionSelectionListener,
+        GameEditDialog.OnEditDoneListener {
 
     private GameListViewAdapter gameListViewAdapter;
 
-    private DatabaseSource source;
 
     public MainActivity() {
-        source = DatabaseSource.getInstance(this);
+
     }
 
     @Override
@@ -42,20 +40,14 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ma_tb_main);
         setSupportActionBar(toolbar);
 
-        /**
-         * Sets the adapter of the list view in order to show all stored games
-         */
-        gamesListView = (ListView)findViewById(R.id.games_listview);
+        ListView gamesListView = (ListView)findViewById(R.id.ma_lv_games);
         gameListViewAdapter = new GameListViewAdapter(this);
         gamesListView.setAdapter(gameListViewAdapter);
 
-        /**
-         * Sets the onClick listener for the "Add Game" button
-         */
-        gamesAddFab = (FloatingActionButton) findViewById(R.id.games_add_fab);
+        FloatingActionButton gamesAddFab = (FloatingActionButton) findViewById(R.id.ma_fbtn_add);
         gamesAddFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,39 +67,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_item_settings:
+            case R.id.ma_mitem_settings:
                 Intent settingsIntent = new Intent(this, SettingsPreferenceActivity.class);
                 startActivity(settingsIntent);
                 break;
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSubmit(String gameTitle, ArrayList<String> playerNames) {
-        finish();
-
-        source.open();
-        long gameId = source.storeGame(gameTitle, playerNames);
-        source.close();
-
-        startGame(gameId);
-    }
-
-    private void startGame(long gameId) {
-        Intent intent = new Intent(this, GameActivity.class);
-        Bundle gameData = new Bundle();
-        gameData.putLong(GameActivity.GAME_ID_KEY, gameId);
-        intent.putExtra(GameActivity.GAME_DATA_BUNDLE_KEY, gameData);
-        startActivity(intent);
-    }
-
-    private void removeGame(long gameId) {
-        source.open();
-        source.removeGame(gameId);
-        source.close();
-        gameListViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -136,20 +102,37 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
+    @Override
+    public void onSubmit(String gameTitle, ArrayList<String> playerNames) {
+        finish();
+        DatabaseSource source = DatabaseSource.getInstance(this);
+        source.open();
+        long gameId = source.storeGame(gameTitle, playerNames);
+        source.close();
+        startGame(gameId);
+    }
 
     @Override
     public void onRemove(long gameId) {
         removeGame(gameId);
     }
 
+
+    @Override
+    public void onEditDone() {
+        gameListViewAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onSelect(DialogInterface dialog, Bundle data, int option) {
         switch(option) {
             case 0:
+                GameEditDialog editDialog = new GameEditDialog(this, data);
+                editDialog.setEditDoneListener(this);
+                editDialog.show();
                 break;
             case 1:
-                GameRemoveDialog removeDialog = new GameRemoveDialog(this,
-                        data.getLong("game_id"), data.getString("game_title"));
+                GameRemoveDialog removeDialog = new GameRemoveDialog(this, data);
                 removeDialog.setRemoveListener(this);
                 removeDialog.show();
                 break;
@@ -169,4 +152,21 @@ public class MainActivity extends AppCompatActivity implements
         snackbar.setActionTextColor(Color.RED);
         snackbar.show();
     }
+
+    private void startGame(long gameId) {
+        Intent intent = new Intent(this, GameActivity.class);
+        Bundle gameData = new Bundle();
+        gameData.putLong(GameActivity.GAME_ID_KEY, gameId);
+        intent.putExtra(GameActivity.GAME_DATA_BUNDLE_KEY, gameData);
+        startActivity(intent);
+    }
+
+    private void removeGame(long gameId) {
+        DatabaseSource source = DatabaseSource.getInstance(this);
+        source.open();
+        source.removeGame(gameId);
+        source.close();
+        gameListViewAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -40,7 +40,7 @@ public class TransferButtonListener extends ActionButtonListener implements
             });
             snackbar.setActionTextColor(Color.RED);
             snackbar.show();
-            playerFragment.getTransferButton().setEnabled(false);
+            playerFragment.setTransferButtonEnabled(false);
         }
     }
 

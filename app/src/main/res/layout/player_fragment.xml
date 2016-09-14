@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/player_name_textview"
+        android:id="@+id/pf_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,7 +17,7 @@
         android:layout_gravity="center"/>
 
     <TextView
-        android:id="@+id/player_balance_textview"
+        android:id="@+id/pf_tv_balance"
         android:background="@drawable/game_balance_textview_rectangle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/fragment_action_button_go"
+                android:id="@+id/pf_ibtn_action_go"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
@@ -46,7 +46,7 @@
                 android:src="@android:drawable/ic_menu_directions" />
 
             <ImageButton
-                android:id="@+id/fragment_action_button_rent"
+                android:id="@+id/pf_ibtn_action_rent"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
@@ -55,7 +55,7 @@
                 android:src="@android:drawable/stat_notify_error" />
 
             <ImageButton
-                android:id="@+id/fragment_action_button_transfer"
+                android:id="@+id/pf_ibtn_action_transfer"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
@@ -64,7 +64,7 @@
                 android:src="@android:drawable/stat_notify_sync_noanim" />
 
             <ImageButton
-                android:id="@+id/fragment_action_button_manage"
+                android:id="@+id/pf_ibtn_action_manage"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"

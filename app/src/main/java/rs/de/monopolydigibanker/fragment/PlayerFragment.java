@@ -60,27 +60,27 @@ public class PlayerFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.player_fragment, container, false);
 
-        goButton = (ImageButton)view.findViewById(R.id.fragment_action_button_go);
+        goButton = (ImageButton)view.findViewById(R.id.pf_ibtn_action_go);
         GoButtonListener goButtonListener = new GoButtonListener(this, game, player);
         goButton.setOnClickListener(goButtonListener);
         goButton.setOnLongClickListener(goButtonListener);
 
-        rentButton = (ImageButton)view.findViewById(R.id.fragment_action_button_rent);
+        rentButton = (ImageButton)view.findViewById(R.id.pf_ibtn_action_rent);
         RentButtonListener rentButtonListener = new RentButtonListener(this, game, player);
         rentButton.setOnClickListener(rentButtonListener);
 
-        transferButton = (ImageButton)view.findViewById(R.id.fragment_action_button_transfer);
+        transferButton = (ImageButton)view.findViewById(R.id.pf_ibtn_action_transfer);
         TransferButtonListener transferButtonListener = new TransferButtonListener(this, game, player);
         transferButton.setOnClickListener(transferButtonListener);
 
-        manageButton = (ImageButton)view.findViewById(R.id.fragment_action_button_manage);
+        manageButton = (ImageButton)view.findViewById(R.id.pf_ibtn_action_manage);
         ManageButtonListener manageButtonListener = new ManageButtonListener(this, game, player);
         manageButton.setOnClickListener(manageButtonListener);
 
-        TextView playerNameTextView = (TextView) view.findViewById(R.id.player_name_textview);
+        TextView playerNameTextView = (TextView) view.findViewById(R.id.pf_tv_name);
         playerNameTextView.setText(player.getName());
 
-        TextView balanceTextView = (TextView) view.findViewById(R.id.player_balance_textview);
+        TextView balanceTextView = (TextView) view.findViewById(R.id.pf_tv_balance);
         balanceTextView.setText(Util.punctuatedBalance(player.getBalance(),
                 preferences.getString("preference_currency_key", "")));
 
@@ -91,9 +91,6 @@ public class PlayerFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        /**
-         * Saves the game to database if the current state isn't saved yet
-         */
         if(!game.isCurrentStateSaved()) {
             DatabaseSource source = DatabaseSource.getInstance(getContext());
             source.open();
@@ -122,19 +119,20 @@ public class PlayerFragment extends Fragment {
         transaction.commit();
     }
 
-    public ImageButton getGoButton() {
-        return goButton;
+    public void setGoButtonEnabled(boolean enabled) {
+        goButton.setEnabled(enabled);
     }
 
-    public ImageButton getRentButton() {
-        return rentButton;
+    public void setRentButtonEnabled(boolean enabled) {
+        rentButton.setEnabled(enabled);
     }
 
-    public ImageButton getTransferButton() {
-        return transferButton;
+    public void setTransferButtonEnabled(boolean enabled) {
+        transferButton.setEnabled(enabled);
     }
 
-    public ImageButton getManageButton() {
-        return manageButton;
+    public void setManageButtonEnabled(boolean enabled) {
+        manageButton.setEnabled(enabled);
     }
+
 }

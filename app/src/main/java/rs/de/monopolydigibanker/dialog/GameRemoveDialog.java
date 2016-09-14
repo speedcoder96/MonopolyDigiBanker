@@ -2,6 +2,7 @@ package rs.de.monopolydigibanker.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import rs.de.monopolydigibanker.R;
@@ -15,9 +16,11 @@ public class GameRemoveDialog extends AlertDialog implements DialogInterface.OnC
 
     private OnRemoveListener removeListener;
 
-    public GameRemoveDialog(Context context, long gameId, String gameTitle) {
+    public GameRemoveDialog(Context context, Bundle data) {
         super(context);
-        this.gameId = gameId;
+
+        this.gameId = data.getLong("game_id");
+        String gameTitle = data.getString("game_title");
 
         setCancelable(true);
         setTitle(String.format(

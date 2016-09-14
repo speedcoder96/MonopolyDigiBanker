@@ -51,5 +51,13 @@
     <string name="game_go_money_accept_dialog_neg_title">No</string>
     <string name="game_go_money_accept_dialog_title">Go! Money</string>
     <string name="game_transfer_money_dialog_title">Money Transfer</string>
+    <string name="menu_item_remove_player_title">Remove Player</string>
+    <string name="game_edit_dialog_title">Editor (%1$s)</string>
+    <string name="game_edit_dialog_pos_title">Save</string>
+    <string name="game_edit_dialog_neg_title">Exit</string>
+    <string name="game_edit_dialog_remove_title">Remove Player</string>
+    <string name="game_edit_dialog_remove_message">Do you want to remove %1$s from %2$s ?</string>
+    <string name="game_edit_dialog_remove_pos">Yes</string>
+    <string name="game_edit_dialog_remove_neg">No</string>
 
 </resources>

@@ -6,11 +6,10 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/game_title_textview"
+        android:id="@+id/ma_tv_listitem_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:text="GameTitle"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginLeft="10dp"/>
@@ -21,16 +20,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/game_player_count_textview"
+            android:id="@+id/ma_tv_listitem_player_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3 Mitspieler"
             android:layout_marginLeft="10dp"
             android:textSize="15sp"/>
 
 
         <TextView
-            android:id="@+id/game_timestamp_textview"
+            android:id="@+id/ma_tv_listitem_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"

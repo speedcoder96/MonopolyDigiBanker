@@ -44,7 +44,7 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
             });
             snackbar.setActionTextColor(Color.RED);
             snackbar.show();
-            playerFragment.getRentButton().setEnabled(false);
+            playerFragment.setRentButtonEnabled(false);
         }
 
     }

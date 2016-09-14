@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/game_viewpager_tabs"
+            android:id="@+id/ga_vp_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="scrollable" />
@@ -21,7 +21,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/game_viewpager"
+        android:id="@+id/ga_vp"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1"

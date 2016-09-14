@@ -1,7 +1,6 @@
 package rs.de.monopolydigibanker.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +49,6 @@ public class GameListViewAdapter extends BaseAdapter {
     public void notifyDataSetChanged() {
         loadListItems();
         super.notifyDataSetChanged();
-
-
     }
 
     @Override
@@ -84,14 +81,14 @@ public class GameListViewAdapter extends BaseAdapter {
         convertView.setOnLongClickListener(activity);
 
 
-        TextView gameTitleTextView = (TextView)convertView.findViewById(R.id.game_title_textview);
+        TextView gameTitleTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_title);
         gameTitleTextView.setText(listItem.getTitle());
 
-        TextView playerCountTextView = (TextView)convertView.findViewById(R.id.game_player_count_textview);
+        TextView playerCountTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_player_count);
         playerCountTextView.setText(String.format(activity.getString(R.string.game_list_preview_playercount),
                 listItem.getPlayerCount()));
 
-        TextView timestampTextView = (TextView)convertView.findViewById(R.id.game_timestamp_textview);
+        TextView timestampTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_timestamp);
         timestampTextView.setText(Util.convertToDate(listItem.getTimestamp()));
 
         return convertView;
