@@ -111,29 +111,34 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
 
     @Override
     public void onClick(View v) {
-        final ImageButton playerRemoveImageButton = (ImageButton)v;
-        final DatabaseHelper.Player player = (DatabaseHelper.Player)playerRemoveImageButton.getTag(R.id.ged_ibtn_player_remove_tag);
+        ImageButton playerRemoveImageButton = (ImageButton)v;
+        DatabaseHelper.Player player = (DatabaseHelper.Player)playerRemoveImageButton.getTag(R.id.ged_ibtn_player_remove_tag);
 
-        AlertDialog.Builder playerRemoveDialogBuilder = new AlertDialog.Builder(getContext());
-        playerRemoveDialogBuilder.setTitle(R.string.game_edit_dialog_remove_title);
-        playerRemoveDialogBuilder.setMessage(String.format(getContext().getString(R.string.game_edit_dialog_remove_message),
-                player.getName(), gameTitle));
-        playerRemoveDialogBuilder.setPositiveButton(R.string.game_edit_dialog_remove_pos, new DialogInterface.OnClickListener() {
+        AcceptDialog removePlayerAcceptDialog = new AcceptDialog(getContext());
+        removePlayerAcceptDialog.putData(0, playerRemoveImageButton);
+        removePlayerAcceptDialog.putData(1, player);
+        removePlayerAcceptDialog.setTitle(R.string.game_edit_dialog_remove_title);
+        removePlayerAcceptDialog.setFormattedMessage(R.string.game_edit_dialog_remove_message, player.getName(), gameTitle);
+        removePlayerAcceptDialog.setPositiveButton(R.string.game_edit_dialog_remove_pos);
+        removePlayerAcceptDialog.setNegativeButton(R.string.game_edit_dialog_remove_neg);
+        removePlayerAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
+                ImageButton playerRemoveImageButton = acceptDialogInterface.get(0, ImageButton.class);
+                DatabaseHelper.Player player = acceptDialogInterface.get(1, DatabaseHelper.Player.class);
                 View itemView = (View) playerRemoveImageButton.getTag(R.id.ged_ibtn_player_remove_view);
                 linearLayout.removeView(itemView);
                 itemViews.remove(itemView);
                 removePlayer(player);
             }
-        });
-        playerRemoveDialogBuilder.setNegativeButton(R.string.game_edit_dialog_remove_neg, new DialogInterface.OnClickListener() {
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onNegative(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
+                acceptDialogInterface.dismiss();
             }
         });
-        playerRemoveDialogBuilder.show();
+        removePlayerAcceptDialog.show();
+
     }
 
     private void updateGame(DatabaseHelper.Game game) {

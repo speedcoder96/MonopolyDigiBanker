@@ -18,14 +18,14 @@ import java.util.ArrayList;
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.adapter.GameListViewAdapter;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.dialog.AcceptDialog;
 import rs.de.monopolydigibanker.dialog.GameAddDialog;
 import rs.de.monopolydigibanker.dialog.GameEditDialog;
 import rs.de.monopolydigibanker.dialog.GameOptionsDialog;
-import rs.de.monopolydigibanker.dialog.GameRemoveDialog;
 
 public class MainActivity extends AppCompatActivity implements
         GameAddDialog.OnAddListener, View.OnClickListener, View.OnLongClickListener,
-        GameRemoveDialog.OnRemoveListener, GameOptionsDialog.OnOptionSelectionListener,
+        GameOptionsDialog.OnOptionSelectionListener,
         GameEditDialog.OnEditDoneListener {
 
     private GameListViewAdapter gameListViewAdapter;
@@ -112,11 +112,6 @@ public class MainActivity extends AppCompatActivity implements
         startGame(gameId);
     }
 
-    @Override
-    public void onRemove(long gameId) {
-        removeGame(gameId);
-    }
-
 
     @Override
     public void onEditDone() {
@@ -132,9 +127,25 @@ public class MainActivity extends AppCompatActivity implements
                 editDialog.show();
                 break;
             case 1:
-                GameRemoveDialog removeDialog = new GameRemoveDialog(this, data);
-                removeDialog.setRemoveListener(this);
-                removeDialog.show();
+
+                AcceptDialog removeGameAcceptDialog = new AcceptDialog(this);
+                removeGameAcceptDialog.putData(0, data.getLong("game_id"));
+                removeGameAcceptDialog.setFormattedTitle(R.string.game_list_remove_dialog_title, data.get("game_title"));
+                removeGameAcceptDialog.setFormattedMessage(R.string.game_list_remove_dialog_message, data.get("game_title"));
+                removeGameAcceptDialog.setPositiveButton(R.string.game_list_remove_dialog_pos_title);
+                removeGameAcceptDialog.setNegativeButton(R.string.game_list_remove_dialog_neg_title);
+                removeGameAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
+                    @Override
+                    public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
+                        removeGame(acceptDialogInterface.get(0, Long.class));
+                    }
+
+                    @Override
+                    public void onNegative(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
+                        acceptDialogInterface.dismiss();
+                    }
+                });
+                removeGameAcceptDialog.show();
                 break;
         }
 
