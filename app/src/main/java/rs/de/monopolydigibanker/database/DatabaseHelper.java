@@ -13,7 +13,14 @@ import java.util.ArrayList;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    /**
+     *
+     */
     private static final String DATABASE_NAME = "buchapp.db";
+
+    /**
+     *
+     */
     private static final int DATABASE_VERSION = 1;
 
     public static abstract class DAO {
@@ -359,7 +366,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public static class Log extends DAO {
+    public static class Log extends DAO implements Parcelable {
+
         public static final String TABLE_NAME = Log.class.getSimpleName();
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_TIMESTAMP = "timestamp";
@@ -387,6 +395,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         public Log(long id) {
             super(id);
+        }
+
+        protected Log(Parcel in) {
+            super(in.readLong());
+            timestamp = in.readLong();
+            eventId = in.readLong();
+            gameId = in.readLong();
+            fromPlayerId = in.readLong();
+            toPlayerId = in.readLong();
         }
 
         public long getTimestamp() {
@@ -428,6 +445,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public void setToPlayerId(long toPlayerId) {
             this.toPlayerId = toPlayerId;
         }
+
+        public static final Creator<Log> CREATOR = new Creator<Log>() {
+            @Override
+            public Log createFromParcel(Parcel in) {
+                return new Log(in);
+            }
+
+            @Override
+            public Log[] newArray(int size) {
+                return new Log[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 6;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(id);
+            dest.writeLong(timestamp);
+            dest.writeLong(eventId);
+            dest.writeLong(gameId);
+            dest.writeLong(fromPlayerId);
+            dest.writeLong(toPlayerId);
+        }
     }
 
 
@@ -440,7 +484,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Game.CREATE_TABLE);
         db.execSQL(Player.CREATE_TABLE);
         db.execSQL(GamePlayer.CREATE_TABLE);
-        db.execSQL(Event.CREATE_TABLE);
         db.execSQL(Log.CREATE_TABLE);
     }
 

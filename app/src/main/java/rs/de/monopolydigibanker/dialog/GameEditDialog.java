@@ -124,8 +124,8 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
         removePlayerAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
             @Override
             public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
-                ImageButton playerRemoveImageButton = acceptDialogInterface.get(0, ImageButton.class);
-                DatabaseHelper.Player player = acceptDialogInterface.get(1, DatabaseHelper.Player.class);
+                ImageButton playerRemoveImageButton = acceptDialogInterface.getData(0, ImageButton.class);
+                DatabaseHelper.Player player = acceptDialogInterface.getData(1, DatabaseHelper.Player.class);
                 View itemView = (View) playerRemoveImageButton.getTag(R.id.ged_ibtn_player_remove_view);
                 linearLayout.removeView(itemView);
                 itemViews.remove(itemView);
@@ -144,7 +144,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
     private void updateGame(DatabaseHelper.Game game) {
         DatabaseSource source = DatabaseSource.getInstance(getContext());
         source.open();
-        source.updateGame(game);
+        source.updateGameTitle(game);
         source.close();
     }
 

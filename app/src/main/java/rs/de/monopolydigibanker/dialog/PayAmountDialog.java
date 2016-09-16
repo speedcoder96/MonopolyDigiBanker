@@ -28,6 +28,8 @@ public class PayAmountDialog extends AlertDialog.Builder {
     private float higherPayFactor;
     private float lowerPayFactor;
 
+    private boolean addAmountToPlayer;
+
     public PayAmountDialog(Context context) {
         super(context);
 
@@ -45,12 +47,12 @@ public class PayAmountDialog extends AlertDialog.Builder {
         this.paymentDoneListener = paymentDoneListener;
     }
 
-    public OnPaymentDoneListener getPaymentDoneListener() {
-        return paymentDoneListener;
-    }
-
     public void setCurrentPlayer(DatabaseHelper.Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public void setAddAmountToPlayer(boolean addAmountToPlayer) {
+        this.addAmountToPlayer = addAmountToPlayer;
     }
 
     public void setTargetPlayers(ArrayList<DatabaseHelper.Player> targetPlayers) {
@@ -85,6 +87,10 @@ public class PayAmountDialog extends AlertDialog.Builder {
 
     public ArrayList<DatabaseHelper.Player> getTargetPlayers() {
         return targetPlayers;
+    }
+
+    public boolean shouldAddAmountToPlayer() {
+        return addAmountToPlayer;
     }
 
     public void showDialog() {
@@ -150,18 +156,29 @@ public class PayAmountDialog extends AlertDialog.Builder {
             DatabaseHelper.Player currentPlayer = payAmountDialog.getCurrentPlayer();
             ArrayList<DatabaseHelper.Player> targetPlayers = payAmountDialog.getTargetPlayers();
             long payAmount = Util.isValidLongType(payAmountEditText.getText().toString());
-            if(payAmount != -1) {
-                payAmount *= targetPlayers.size();
-                if(payAmount <= currentPlayer.getBalance()) {
-                    for(DatabaseHelper.Player targetPlayer : targetPlayers) {
-                        targetPlayer.addBalance(currentPlayer.subtractBalance(payAmount / targetPlayers.size()));
-                        payAmountDialog.onUpdateEvent(targetPlayer);
+            if(payAmount != Util.NO_VALID_LONG) {
+                if(targetPlayers != null && targetPlayers.size() > 0) {
+                    payAmount *= targetPlayers.size();
+                    if(payAmount <= currentPlayer.getBalance()) {
+                        for(DatabaseHelper.Player targetPlayer : targetPlayers) {
+                            targetPlayer.addBalance(currentPlayer.subtractBalance(payAmount / targetPlayers.size()));
+                            payAmountDialog.onUpdateEvent(targetPlayer);
+                        }
+                        payAmountDialog.onUpdateEvent(currentPlayer);
+                        dialog.dismiss();
+                        payAmountDialog.onPaymentDoneEvent();
+                    } else {
+                        clearPayAmountEditText();
+                    }
+                } else {
+                    if(payAmountDialog.shouldAddAmountToPlayer()) {
+                        currentPlayer.addBalance(payAmount);
+                    } else {
+                        currentPlayer.subtractBalance(payAmount);
                     }
                     payAmountDialog.onUpdateEvent(currentPlayer);
                     dialog.dismiss();
                     payAmountDialog.onPaymentDoneEvent();
-                } else {
-                    clearPayAmountEditText();
                 }
             } else {
                clearPayAmountEditText();

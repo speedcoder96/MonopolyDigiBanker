@@ -13,6 +13,8 @@ import java.util.Locale;
  */
 public class Util {
 
+    public static final int NO_VALID_LONG = -1;
+
     public static ArrayList<String> toStringValues(ArrayList<EditText> inputs) {
         ArrayList<String> values = new ArrayList<String>();
         for(EditText input : inputs) {
@@ -25,6 +27,12 @@ public class Util {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(timestamp);
         return DateFormat.format("dd.MM.yyyy", calendar).toString();
+    }
+
+    public static String convertToLogDate(long timestamp) {
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTimeInMillis(timestamp);
+        return DateFormat.format("dd.MM.yyyy HH:mm:ss", calendar).toString();
     }
 
     public static String punctuatedBalance(long balance, String currencyCharacter) {

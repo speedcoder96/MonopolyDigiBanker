@@ -1,6 +1,5 @@
 package rs.de.monopolydigibanker.listener;
 
-import android.content.DialogInterface;
 import android.view.View;
 
 import rs.de.monopolydigibanker.database.DatabaseHelper;

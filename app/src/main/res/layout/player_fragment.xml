@@ -72,9 +72,21 @@
                 android:background="@drawable/round_button"
                 android:src="@android:drawable/checkbox_on_background" />
 
-
     </GridLayout>
 
+    <TextView
+        android:id="@+id/pf_tv_log"
+        android:background="@drawable/game_balance_textview_rectangle"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="100"
+        android:maxLines="100"
+        android:textColor="#ffffff"
+        android:scrollbars="vertical"/>
 
 
 

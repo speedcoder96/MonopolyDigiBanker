@@ -16,7 +16,6 @@ import android.util.SparseArray;
 public class AcceptDialog implements DialogInterface.OnClickListener {
 
     private OnAcceptDialogListener acceptDialogListener;
-    private OnUpdateCallback updateCallback;
 
     private AcceptDialogInterface acceptDialogInterface;
 
@@ -66,13 +65,9 @@ public class AcceptDialog implements DialogInterface.OnClickListener {
         this.acceptDialogListener = acceptDialogListener;
     }
 
-    public void setUpdateCallback(OnUpdateCallback updateCallback) {
-        this.updateCallback = updateCallback;
-    }
-
     public void show() {
         AlertDialog dialog = acceptDialogBuilder.show();
-        acceptDialogInterface = new AcceptDialogInterface(dialog, updateCallback, dataContainer);
+        acceptDialogInterface = new AcceptDialogInterface(dialog, dataContainer);
     }
 
     @Override
@@ -96,27 +91,18 @@ public class AcceptDialog implements DialogInterface.OnClickListener {
 
     }
 
-    public static interface OnUpdateCallback {
-
-        public void onUpdate();
-
-    }
-
     public static class AcceptDialogInterface {
 
         private AlertDialog dialog;
         private SparseArray<Object> dataContainer;
 
-        private OnUpdateCallback updateCallback;
 
-        private AcceptDialogInterface(AlertDialog dialog, OnUpdateCallback updateCallback, SparseArray<Object> dataContainer) {
+        private AcceptDialogInterface(AlertDialog dialog, SparseArray<Object> dataContainer) {
             this.dialog = dialog;
-            this.updateCallback = updateCallback;
-
             this.dataContainer = dataContainer;
         }
 
-        public <T> T get(int key, Class<T> type) {
+        public <T> T getData(int key, Class<T> type) {
             return type.cast(dataContainer.get(key));
         }
 
@@ -124,10 +110,6 @@ public class AcceptDialog implements DialogInterface.OnClickListener {
             dialog.dismiss();
         }
 
-        public void update() {
-            if(updateCallback != null)
-                updateCallback.onUpdate();
-        }
     }
 
 }

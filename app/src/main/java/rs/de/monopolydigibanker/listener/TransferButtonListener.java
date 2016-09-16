@@ -21,7 +21,6 @@ public class TransferButtonListener extends ActionButtonListener implements
 
     @Override
     public void onClick(View v) {
-
         if(player.getBalance() > 0) {
             PlayerSelectionDialog playerSelectionDialog = new PlayerSelectionDialog(playerFragment, game, player, true);
             playerSelectionDialog.setSelectListener(this);

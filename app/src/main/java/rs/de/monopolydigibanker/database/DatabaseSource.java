@@ -10,32 +10,40 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
+
 
 public class DatabaseSource {
 
     /**
-     *
+     * Holds the one and only instance of this class.
+     * Singleton pattern
      */
     private static DatabaseSource instance;
 
     /**
-     *
+     * Holds the instance of the SQLDatabase
+     * that is currently open
      */
     private SQLiteDatabase database;
 
     /**
-     *
+     * Holds the instance of the DatabaseHelper
+     * that contains the database structure and
+     * its table definition
      */
     private DatabaseHelper dbHelper;
 
     /**
-     *
+     * Holds the instance of the application context
      */
     private Context context;
 
     /**
+     * DatabaseSource private constructor to insure
+     * that only one instance of this class is created
      *
-     * @param context
+     * @param context - the context of the application
      */
     private DatabaseSource(Context context) {
         this.context = context;
@@ -43,9 +51,11 @@ public class DatabaseSource {
     }
 
     /**
+     * Static method that returns the singleton instance of
+     * this class
      *
-     * @param context
-     * @return
+     * @param context - the context of the application
+     * @return returns the singleton instance
      */
     public static DatabaseSource getInstance(Context context) {
         if(instance == null) {
@@ -71,45 +81,60 @@ public class DatabaseSource {
     }
 
     /**
+     * Stores a game with its title and players in database. The connection
+     * between each player and their games which they belong to, is stored
+     * in a separate table. Each player is stored with the preference balance
+     * value set in the settings of the application.
      *
-     * @param gameTitle
-     * @param playerNames
-     * @return
+     * @param gameTitle - the title of the game
+     * @param playerNames - a list of the player names
+     * @return returns the id of the game that the database has allocated
      */
     public long storeGame(String gameTitle, ArrayList<String> playerNames) {
 
+        /**
+         * The settings of the app gets loaded in order to get the current set values
+         */
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-
+        /**
+         * Stores all attributes of the game including title, creation timestamp and balance flag
+         */
         ContentValues gameValues = new ContentValues();
         gameValues.put(DatabaseHelper.Game.COLUMN_TITLE, gameTitle);
         gameValues.put(DatabaseHelper.Game.COLUMN_TIMESTAMP, System.currentTimeMillis());
         gameValues.put(DatabaseHelper.Game.COLUMN_BALANCE_FLAG, 0);
         long gameId = database.insert(DatabaseHelper.Game.TABLE_NAME, null, gameValues);
 
+        /**
+         * Stores each player including name, start default balance and their connection to
+         * the game they belong to
+         */
         for(String playerName : playerNames) {
 
             ContentValues playerValues = new ContentValues();
             playerValues.put(DatabaseHelper.Player.COLUMN_NAME, playerName);
             playerValues.put(DatabaseHelper.Player.COLUMN_BALANCE,
-                    Long.parseLong(preferences.getString("preference_default_balance_key", "15000000")));
+                    Long.parseLong(preferences.getString(SettingsPreferenceActivity.SETTING_BALANCE, "0")));
             long playerId = database.insert(DatabaseHelper.Player.TABLE_NAME, null, playerValues);
 
             ContentValues gpValues = new ContentValues();
             gpValues.put(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId);
             gpValues.put(DatabaseHelper.GamePlayer.COLUMN_PLAYER_ID, playerId);
             database.insert(DatabaseHelper.GamePlayer.TABLE_NAME, null, gpValues);
+
         }
 
         return gameId;
     }
 
     /**
+     * Saves an already created game instance to database.
+     * The balance of each player gets updated.
      *
-     * @param game
+     * @param game - the game instance to save
      */
     public void saveGame(DatabaseHelper.Game game) {
-
         ArrayList<DatabaseHelper.Player> players = game.getPlayers();
         for(DatabaseHelper.Player player : players) {
             ContentValues playerData = new ContentValues();
@@ -117,15 +142,15 @@ public class DatabaseSource {
             database.update(DatabaseHelper.Player.TABLE_NAME, playerData,
                     DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, player.getId()), null);
         }
-
         game.setCurrentStateSaved(DatabaseHelper.Game.STATE_SAVED);
-
     }
 
     /**
+     * Loads an already existing game from database, stores it into a game object
+     * instance and returns it.
      *
-     * @param gameId
-     * @return
+     * @param gameId - the id to identify the game to load
+     * @return the loaded game in a game object instance
      */
     public DatabaseHelper.Game loadGame(long gameId) {
 
@@ -171,10 +196,10 @@ public class DatabaseSource {
     }
 
     /**
-     *
-     * @param game
+     * Updates the title of the game in database.
+     * @param game - the game to update the title of
      */
-    public void updateGame(DatabaseHelper.Game game) {
+    public void updateGameTitle(DatabaseHelper.Game game) {
 
         ContentValues gameData = new ContentValues();
         gameData.put(DatabaseHelper.Game.COLUMN_TITLE, game.getTitle());
@@ -184,8 +209,10 @@ public class DatabaseSource {
     }
 
     /**
+     * Removes a game including the players that belong to it
+     * from the database.
      *
-     * @param gameId
+     * @param gameId - the id to identify the game to remove
      */
     public void removeGame(long gameId) {
 
@@ -215,8 +242,9 @@ public class DatabaseSource {
     }
 
     /**
+     * Updates a player object instance values in database.
      *
-     * @param player
+     * @param player - the player object to update
      */
     public void updatePlayer(DatabaseHelper.Player player) {
 
@@ -230,8 +258,9 @@ public class DatabaseSource {
     }
 
     /**
+     * Removes a player from database.
      *
-     * @param playerId
+     * @param playerId - the id to identify the player to remove
      */
     public void removePlayer(long playerId) {
 
@@ -244,16 +273,20 @@ public class DatabaseSource {
     }
 
     /**
+     * Wrapper-Method! Removes a player from database.
      *
-     * @param player
+     * @param player - the player object instance to remove from database
      */
     public void removePlayer(DatabaseHelper.Player player) {
         removePlayer(player.getId());
     }
 
     /**
+     * Loads the necessary data from all games to display. The data of each game gets
+     * stored into a list item object instance and put into a list. A list of all items
+     * gets returned.
      *
-     * @return
+     * @return returns a list of items containing game data to display for preview
      */
     public ArrayList<DatabaseHelper.Game.ListItem> loadListItems() {
         ArrayList<DatabaseHelper.Game.ListItem> listItems = new ArrayList<>();

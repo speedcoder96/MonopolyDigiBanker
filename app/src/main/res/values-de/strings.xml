@@ -15,6 +15,7 @@
         <item>Bearbeiten</item>
         <item>Entfernen</item>
         <item>Teilen</item>
+        <item>Spiel zurücksetzen</item>
     </string-array>
 
 
@@ -60,5 +61,18 @@
     <string name="game_edit_dialog_remove_message">Wollen Sie %1$s aus %2$s entfernen?</string>
     <string name="game_edit_dialog_remove_pos">Ja</string>
     <string name="game_edit_dialog_remove_neg">Nein</string>
+    <string name="game_manage_add_money_dialog_title">Geldmanagement (+)</string>
+    <string name="game_manage_subtract_money_dialog_title">Geldmanagement (-)</string>
+    <string name="game_manage_add_money_pos_title">+</string>
+    <string name="game_manage_subtract_money_pos_title">-</string>
+    <string name="game_reset_dialog_title">Spiel zurücksetzen</string>
+    <string name="game_reset_dialog_message">Wollen Sie das Spiel %1$s zurücksetzen? Alle Spieler werden auf das Startkapital von %2$s zurückgesetzt.</string>
+    <string name="game_reset_dialog_pos_title">Ja</string>
+    <string name="game_reset_dialog_neg_title">Nein</string>
+    <string name="preference_category_balance_title">Geldeinstellungen</string>
+    <string name="preference_category_balance_summary">Einstellungen für Startkapital und LOS! - Gehalt</string>
+    <string name="preference_category_game_title">Spieleinstellungen</string>
+    <string name="preference_log_flag_title">Logging aktiviert</string>
+    <string name="preference_log_flag_summary">Aktiviert das Loggen von einzelnen erfolgten Spielevents</string>
 
 </resources>

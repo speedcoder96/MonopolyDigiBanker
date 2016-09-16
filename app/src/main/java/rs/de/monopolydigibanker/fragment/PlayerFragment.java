@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import rs.de.monopolydigibanker.R;
+import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
 import rs.de.monopolydigibanker.listener.GoButtonListener;
@@ -35,6 +37,8 @@ public class PlayerFragment extends Fragment {
     private ImageButton rentButton;
     private ImageButton transferButton;
     private ImageButton manageButton;
+
+    private TextView logTextView;
 
     public static PlayerFragment newInstance(DatabaseHelper.Game game, DatabaseHelper.Player player) {
         Bundle args = new Bundle();
@@ -76,13 +80,23 @@ public class PlayerFragment extends Fragment {
         manageButton = (ImageButton)view.findViewById(R.id.pf_ibtn_action_manage);
         ManageButtonListener manageButtonListener = new ManageButtonListener(this, game, player);
         manageButton.setOnClickListener(manageButtonListener);
+        manageButton.setOnLongClickListener(manageButtonListener);
+
+        logTextView = (TextView)view.findViewById(R.id.pf_tv_log);
+        logTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        /**
+         * TODO LogView basteln und Datenbank für den Save und Load von Logs vorbereiten
+         *
+         */
+        logTextView.setText(Util.convertToLogDate(System.currentTimeMillis()) + ": Rene hat Marcus, Steffen, Hannes, Marcella 2.500.000$ gezahlt.");
 
         TextView playerNameTextView = (TextView) view.findViewById(R.id.pf_tv_name);
         playerNameTextView.setText(player.getName());
 
         TextView balanceTextView = (TextView) view.findViewById(R.id.pf_tv_balance);
         balanceTextView.setText(Util.punctuatedBalance(player.getBalance(),
-                preferences.getString("preference_currency_key", "")));
+                preferences.getString(SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "")));
 
         return view;
     }

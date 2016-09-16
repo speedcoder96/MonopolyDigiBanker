@@ -11,6 +11,13 @@ import rs.de.monopolydigibanker.R;
  */
 public class SettingsPreferenceActivity extends PreferenceActivity {
 
+    public static final String SETTING_BALANCE = "preference_default_balance_key";
+    public static final String SETTING_GO_MONEY = "preference_go_money_key";
+    public static final String SETTING_GO_MONEY_FLAG = "preference_go_flag_key";
+    public static final String SETTING_CURRENCY_CHAR = "preference_currency_key";
+
+    public static final String SETTING_LOG_ACTIVATED = "preference_log_flag_key";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

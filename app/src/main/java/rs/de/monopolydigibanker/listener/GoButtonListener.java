@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 
 import rs.de.monopolydigibanker.R;
+import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.dialog.AcceptDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
@@ -25,10 +26,10 @@ public class GoButtonListener extends ActionButtonListener {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(playerFragment.getContext());
 
-        goMoneyValue = Long.parseLong(preferences.getString("preference_go_money_key", "2000000"));
-        goMoneyValueFactor = (preferences.getBoolean("preference_go_flag_key", false)) ? 2 : 1;
+        goMoneyValue = Long.parseLong(preferences.getString(SettingsPreferenceActivity.SETTING_GO_MONEY, "2000000"));
+        goMoneyValueFactor = (preferences.getBoolean(SettingsPreferenceActivity.SETTING_GO_MONEY_FLAG, false)) ? 2 : 1;
 
-        currencyCharacter = preferences.getString("preference_currency_key", "");
+        currencyCharacter = preferences.getString(SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "");
     }
 
     @Override
@@ -54,7 +55,7 @@ public class GoButtonListener extends ActionButtonListener {
         goMoneyAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
             @Override
             public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
-                player.addBalance(acceptDialogInterface.get(0, Long.class));
+                player.addBalance(acceptDialogInterface.getData(0, Long.class));
                 playerFragment.updateFragment();
                 game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
             }

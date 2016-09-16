@@ -15,6 +15,7 @@
         <item>Edit</item>
         <item>Delete</item>
         <item>Share</item>
+        <item>Reset Game</item>
     </string-array>
 
 
@@ -60,5 +61,18 @@
     <string name="game_edit_dialog_remove_message">Do you want to remove %1$s from %2$s ?</string>
     <string name="game_edit_dialog_remove_pos">Yes</string>
     <string name="game_edit_dialog_remove_neg">No</string>
+    <string name="game_manage_add_money_dialog_title">Money Management (+)</string>
+    <string name="game_manage_subtract_money_dialog_title">Money Management (-)</string>
+    <string name="game_manage_add_money_pos_title">+</string>
+    <string name="game_manage_subtract_money_pos_title">-</string>
+    <string name="game_reset_dialog_title">Reset Game</string>
+    <string name="game_reset_dialog_message">Do you want to reset %1$s ? All players will start with the default balance of %2$s .</string>
+    <string name="game_reset_dialog_pos_title">Yes</string>
+    <string name="game_reset_dialog_neg_title">No</string>
+    <string name="preference_category_balance_title">Balance Settings</string>
+    <string name="preference_category_balance_summary">Settings for default balance and GO! money values</string>
+    <string name="preference_category_game_title">Game Settings</string>
+    <string name="preference_log_flag_title">Activate Logging</string>
+    <string name="preference_log_flag_summary">Activates the logging of every taken game event</string>
 
 </resources>
