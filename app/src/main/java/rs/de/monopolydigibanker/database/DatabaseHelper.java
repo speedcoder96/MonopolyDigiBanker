@@ -375,8 +375,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_GAME_ID = "game_id";
         public static final String COLUMN_FROM_PLAYER_ID = "from_id";
         public static final String COLUMN_TO_PLAYER_ID = "to_id";
+        public static final String COLUMN_EVENT_VALUE = "event_value";
         public static final String[] ALL_COLUMNS = {
-            COLUMN_ID, COLUMN_TIMESTAMP, COLUMN_EVENT_ID, COLUMN_GAME_ID, COLUMN_FROM_PLAYER_ID, COLUMN_TO_PLAYER_ID
+            COLUMN_ID, COLUMN_TIMESTAMP, COLUMN_EVENT_ID, COLUMN_GAME_ID, COLUMN_FROM_PLAYER_ID, COLUMN_TO_PLAYER_ID,
+                COLUMN_EVENT_VALUE
         };
 
         public static final String CREATE_TABLE = "CREATE TABLE " + Log.class.getSimpleName() + " ( "
@@ -385,13 +387,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENT_ID + " INTEGER NULL, "
                 + COLUMN_GAME_ID + " INTEGER NOT NULL, "
                 + COLUMN_FROM_PLAYER_ID + " INTEGER NOT NULL, "
-                + COLUMN_TO_PLAYER_ID + " INTEGER NOT NULL );";
+                + COLUMN_TO_PLAYER_ID + " INTEGER NOT NULL, "
+                + COLUMN_EVENT_VALUE + " INTEGER NOT NULL );";
 
         private long timestamp;
         private long eventId;
         private long gameId;
         private long fromPlayerId;
         private long toPlayerId;
+        private long eventValue;
 
         public Log(long id) {
             super(id);
@@ -404,6 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             gameId = in.readLong();
             fromPlayerId = in.readLong();
             toPlayerId = in.readLong();
+            eventValue = in.readLong();
         }
 
         public long getTimestamp() {
@@ -446,6 +451,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.toPlayerId = toPlayerId;
         }
 
+        public void setEventValue(long eventValue) {
+            this.eventValue = eventValue;
+        }
+
+        public long getEventValue() {
+            return eventValue;
+        }
+
         public static final Creator<Log> CREATOR = new Creator<Log>() {
             @Override
             public Log createFromParcel(Parcel in) {
@@ -471,6 +484,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             dest.writeLong(gameId);
             dest.writeLong(fromPlayerId);
             dest.writeLong(toPlayerId);
+            dest.writeLong(eventValue);
         }
     }
 
