@@ -15,6 +15,7 @@
         <item>Delete</item>
         <item>Share</item>
         <item>Reset Game</item>
+        <item>Export Game</item>
     </string-array>
 
 
@@ -74,5 +75,13 @@
     <string name="preference_category_game_title">Game Settings</string>
     <string name="preference_log_flag_title">Activate Logging</string>
     <string name="preference_log_flag_summary">Activates the logging of every taken game event</string>
+    <string name="game_log_go_money_event">%1$s got a GO! money of %2$s.</string>
+    <string name="game_log_double_go_money_event">%1$s got a double GO! money of %2$s</string>
+    <string name="game_log_pay_rent_event">%1$s paid a rent of %2$s to %3$s</string>
+    <string name="game_log_transfer_event">%1$s transferred a sum of %2$s to %3$s</string>
+    <string name="game_log_manage_add_money_event">%1$s added %2$s to its account balance</string>
+    <string name="game_log_manage_subtract_money_event">%1$s subtracted %2$s of its account</string>
+    <string name="game_log_new_balance">%1$s has a new balance of %2$s</string>
+    <string name="game_log_disabled_title">Logging deactivated</string>
 
 </resources>

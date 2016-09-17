@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
+import rs.de.monopolydigibanker.util.Util;
 
 
 public class DatabaseSource {
@@ -136,12 +136,31 @@ public class DatabaseSource {
      */
     public void saveGame(DatabaseHelper.Game game) {
         ArrayList<DatabaseHelper.Player> players = game.getPlayers();
+        ArrayList<DatabaseHelper.Log> logs = game.getLogs();
+
         for(DatabaseHelper.Player player : players) {
             ContentValues playerData = new ContentValues();
             playerData.put(DatabaseHelper.Player.COLUMN_BALANCE, player.getBalance());
             database.update(DatabaseHelper.Player.TABLE_NAME, playerData,
                     DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, player.getId()), null);
+
         }
+
+        for(DatabaseHelper.Log log : logs) {
+            if(!log.isRegistered()) {
+                ContentValues logData = new ContentValues();
+                logData.put(DatabaseHelper.Log.COLUMN_TIMESTAMP, log.getTimestamp());
+                logData.put(DatabaseHelper.Log.COLUMN_EVENT_ID, log.getEventId());
+                logData.put(DatabaseHelper.Log.COLUMN_GAME_ID, log.getGameId());
+                logData.put(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID, log.getFromPlayerId());
+                logData.put(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID, log.getToPlayerId());
+                logData.put(DatabaseHelper.Log.COLUMN_EVENT_VALUE, log.getEventValue());
+
+                long logId = database.insert(DatabaseHelper.Log.TABLE_NAME, null, logData);
+                log.setId(logId);
+            }
+        }
+
         game.setCurrentStateSaved(DatabaseHelper.Game.STATE_SAVED);
     }
 
@@ -152,7 +171,8 @@ public class DatabaseSource {
      * @param gameId - the id to identify the game to load
      * @return the loaded game in a game object instance
      */
-    public DatabaseHelper.Game loadGame(long gameId) {
+    public DatabaseHelper.Game loadGame(long gameId, Context context) {
+
 
         DatabaseHelper.Game game = new DatabaseHelper.Game(gameId);
 
@@ -168,6 +188,36 @@ public class DatabaseSource {
         game.setBalanceFlag(gameData.getLong(gameData.getColumnIndex(DatabaseHelper.Game.COLUMN_BALANCE_FLAG)));
         gameData.close();
 
+        if (Util.isLoggingActivated(context)) {
+            Cursor logData = database.query(DatabaseHelper.Log.TABLE_NAME,
+                    DatabaseHelper.Log.ALL_COLUMNS,
+                    DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null, null, null, null);
+            logData.moveToFirst();
+
+            while(!logData.isAfterLast()) {
+                DatabaseHelper.Log log = new DatabaseHelper.Log(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_ID)));
+                log.setTimestamp(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TIMESTAMP)));
+                log.setGameId(gameId);
+                log.setEventId(logData.getInt(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_EVENT_ID)));
+                log.setEventValue(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_EVENT_VALUE)));
+
+                if(!logData.isNull(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID))) {
+                    log.setFromPlayerId(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID)));
+                } else {
+                    log.setFromPlayerId(DatabaseHelper.Log.NOT_REGISTERED);
+                }
+
+                if(!logData.isNull(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID))) {
+                    log.setToPlayerId(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID)));
+                } else {
+                    log.setToPlayerId(DatabaseHelper.Log.NOT_REGISTERED);
+                }
+
+                game.addLog(log);
+                logData.moveToNext();
+            }
+            logData.close();
+        }
 
         Cursor playerList = database.query(DatabaseHelper.GamePlayer.TABLE_NAME,
                 DatabaseHelper.GamePlayer.ALL_COLUMNS,
@@ -235,10 +285,21 @@ public class DatabaseSource {
         database.delete(DatabaseHelper.GamePlayer.TABLE_NAME,
                 DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId), null);
 
-
         database.delete(DatabaseHelper.Game.TABLE_NAME,
                 DatabaseHelper.where(DatabaseHelper.Game.COLUMN_ID, gameId), null);
 
+        database.delete(DatabaseHelper.Log.TABLE_NAME,
+                DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null);
+
+    }
+
+    /**
+     * Removes all logs taken in the game with "gameId".
+     * @param gameId - the id to identify the game to remove the logs from
+     */
+    public void removeLogs(long gameId) {
+        database.delete(DatabaseHelper.Log.TABLE_NAME,
+                DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null);
     }
 
     /**

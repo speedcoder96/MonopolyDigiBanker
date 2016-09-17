@@ -34,19 +34,24 @@ public class GoButtonListener extends ActionButtonListener {
 
     @Override
     public void onClick(View v) {
-       payGo(goMoneyValue);
+        payGo(goMoneyValue, DatabaseHelper.Event.i(DatabaseHelper.Event.GO_MONEY_EVENT));
     }
 
     @Override
     public boolean onLongClick(View v) {
-        payGo(goMoneyValue * goMoneyValueFactor);
+        int eventId = (goMoneyValueFactor == 2) ?
+                DatabaseHelper.Event.i(DatabaseHelper.Event.DOUBLE_GO_MONEY_EVENT) :
+                DatabaseHelper.Event.i(DatabaseHelper.Event.GO_MONEY_EVENT);
+        payGo(goMoneyValue * goMoneyValueFactor, eventId);
         return true;
     }
 
-    private void payGo(long potentialGoMoneyValue) {
+    private void payGo(long potentialGoMoneyValue, int eventId) {
 
         AcceptDialog goMoneyAcceptDialog = new AcceptDialog(playerFragment.getContext());
         goMoneyAcceptDialog.putData(0, potentialGoMoneyValue);
+        goMoneyAcceptDialog.putData(1, eventId);
+
         goMoneyAcceptDialog.setTitle(R.string.game_go_money_accept_dialog_title);
         goMoneyAcceptDialog.setFormattedMessage(R.string.game_go_money_accept_dialog_message,
                 Util.punctuatedBalance((potentialGoMoneyValue), currencyCharacter), player.getName());
@@ -55,9 +60,14 @@ public class GoButtonListener extends ActionButtonListener {
         goMoneyAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
             @Override
             public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
-                player.addBalance(acceptDialogInterface.getData(0, Long.class));
-                playerFragment.updateFragment();
+                long potentialGoMoneyValue = acceptDialogInterface.getData(0, Long.class);
+                int eventId = acceptDialogInterface.getData(1, Integer.class);
+                player.addBalance(potentialGoMoneyValue);
+
+                game.newLog(eventId, potentialGoMoneyValue, player.getId(), Util.isLoggingActivated(playerFragment.getContext()));
                 game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
+
+                playerFragment.updateFragment();
             }
 
             @Override

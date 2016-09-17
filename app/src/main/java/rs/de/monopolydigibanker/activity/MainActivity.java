@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int OPTION_REMOVE = 1;
     public static final int OPTION_SHARE = 2;
     public static final int OPTION_RESET = 3;
+    public static final int OPTION_EXPORT = 4;
 
     private GameListViewAdapter gameListViewAdapter;
 
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements
                 removeGameAcceptDialog.show();
                 break;
             case OPTION_SHARE:
+                Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
                 break;
             case OPTION_RESET:
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -180,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
                 resetGameAcceptDialog.show();
+                break;
+            case OPTION_EXPORT:
+                Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -217,11 +223,12 @@ public class MainActivity extends AppCompatActivity implements
     private void resetGame(long gameId, long defaultBalance) {
         DatabaseSource source = DatabaseSource.getInstance(this);
         source.open();
-        DatabaseHelper.Game game = source.loadGame(gameId);
+        DatabaseHelper.Game game = source.loadGame(gameId, this);
         for(DatabaseHelper.Player player : game.getPlayers()) {
             player.setBalance(defaultBalance);
             source.updatePlayer(player);
         }
+        source.removeLogs(gameId);
         source.close();
     }
 

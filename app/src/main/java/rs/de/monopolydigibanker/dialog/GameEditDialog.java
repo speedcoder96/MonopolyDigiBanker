@@ -46,7 +46,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
 
         DatabaseSource source = DatabaseSource.getInstance(context);
         source.open();
-        game = source.loadGame(gameId);
+        game = source.loadGame(gameId, context);
         source.close();
 
         setTitle(String.format(context.getString(R.string.game_edit_dialog_title), gameTitle));

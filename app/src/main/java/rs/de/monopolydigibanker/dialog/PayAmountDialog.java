@@ -162,11 +162,13 @@ public class PayAmountDialog extends AlertDialog.Builder {
                     if(payAmount <= currentPlayer.getBalance()) {
                         for(DatabaseHelper.Player targetPlayer : targetPlayers) {
                             targetPlayer.addBalance(currentPlayer.subtractBalance(payAmount / targetPlayers.size()));
+                        }
+                        dialog.dismiss();
+                        payAmountDialog.onPaymentDoneEvent(currentPlayer, targetPlayers, payAmount / targetPlayers.size());
+                        for(DatabaseHelper.Player targetPlayer : targetPlayers) {
                             payAmountDialog.onUpdateEvent(targetPlayer);
                         }
                         payAmountDialog.onUpdateEvent(currentPlayer);
-                        dialog.dismiss();
-                        payAmountDialog.onPaymentDoneEvent();
                     } else {
                         clearPayAmountEditText();
                     }
@@ -176,9 +178,9 @@ public class PayAmountDialog extends AlertDialog.Builder {
                     } else {
                         currentPlayer.subtractBalance(payAmount);
                     }
-                    payAmountDialog.onUpdateEvent(currentPlayer);
                     dialog.dismiss();
-                    payAmountDialog.onPaymentDoneEvent();
+                    payAmountDialog.onPaymentDoneEvent(currentPlayer, targetPlayers, payAmount);
+                    payAmountDialog.onUpdateEvent(currentPlayer);
                 }
             } else {
                clearPayAmountEditText();
@@ -200,9 +202,9 @@ public class PayAmountDialog extends AlertDialog.Builder {
         }
     }
 
-    public void onPaymentDoneEvent() {
+    public void onPaymentDoneEvent(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
         if(paymentDoneListener != null) {
-            paymentDoneListener.onPaymentDone();
+            paymentDoneListener.onPaymentDone(player, targetPlayers, payAmountValue);
         }
     }
 
@@ -210,7 +212,7 @@ public class PayAmountDialog extends AlertDialog.Builder {
     public static interface OnPaymentDoneListener {
 
         public void onUpdate(DatabaseHelper.Player player);
-        public void onPaymentDone();
+        public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue);
 
     }
 

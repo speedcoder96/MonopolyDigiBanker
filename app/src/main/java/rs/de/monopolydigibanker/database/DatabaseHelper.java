@@ -1,12 +1,21 @@
 package rs.de.monopolydigibanker.database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.util.SparseArray;
+import android.util.SparseLongArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import rs.de.monopolydigibanker.R;
+import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
+import rs.de.monopolydigibanker.util.Util;
 
 /**
  * Created by Rene on 08.09.2016.
@@ -22,6 +31,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      */
     private static final int DATABASE_VERSION = 1;
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(Game.CREATE_TABLE);
+        db.execSQL(Player.CREATE_TABLE);
+        db.execSQL(GamePlayer.CREATE_TABLE);
+        db.execSQL(Log.CREATE_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE " + Game.CREATE_TABLE);
+        db.execSQL("DROP TABLE " + Player.CREATE_TABLE);
+        db.execSQL("DROP TABLE " + GamePlayer.CREATE_TABLE);
+        db.execSQL("DROP TABLE " + Log.CREATE_TABLE);
+        onCreate(db);
+    }
+
+    public static String where(String columnName, long value) {
+        return columnName + " = " + value;
+    }
+
 
     public static abstract class DAO {
 
@@ -47,6 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_TIMESTAMP = "timestamp";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_BALANCE_FLAG = "balanceflag";
+
         public static final String[] ALL_COLUMNS = {
                 COLUMN_ID, COLUMN_TIMESTAMP, COLUMN_TITLE, COLUMN_BALANCE_FLAG
         };
@@ -61,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         private String title;
         private long timestamp;
         private ArrayList<Player> players;
+        private ArrayList<Log> logs;
         private long balanceFlag;
 
         private byte currentStateSaved;
@@ -68,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public Game(long id) {
             super(id);
             players = new ArrayList<Player>();
+            logs = new ArrayList<Log>();
         }
 
         public Game(Parcel in) {
@@ -76,8 +114,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             timestamp = in.readLong();
             players = in.createTypedArrayList(Player.CREATOR);
             balanceFlag = in.readLong();
-
             currentStateSaved = in.readByte();
+            logs = in.createTypedArrayList(Log.CREATOR);
         }
 
         public static final Creator<Game> CREATOR = new Creator<Game>() {
@@ -118,6 +156,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         public ArrayList<Player> getPlayers() {
             return players;
+        }
+
+        public void addLog(Log log) {
+            logs.add(log);
+        }
+
+        public void newLog(int eventId, long eventValue, long fromPlayerId, long toPlayerId, boolean logActivated) {
+            if(logActivated) {
+                Log log = new Log(Log.NOT_REGISTERED);
+                log.setTimestamp(System.currentTimeMillis());
+                log.setGameId(id);
+                log.setFromPlayerId(fromPlayerId);
+                log.setToPlayerId(toPlayerId);
+                log.setEventId(eventId);
+                log.setEventValue(eventValue);
+                logs.add(log);
+            }
+        }
+
+        public void newLog(int eventId, long eventValue, long fromPlayerId, boolean logActivated) {
+            if(logActivated) {
+                Log log = new Log(Log.NOT_REGISTERED);
+                log.setTimestamp(System.currentTimeMillis());
+                log.setGameId(id);
+                log.setFromPlayerId(fromPlayerId);
+                log.setEventId(eventId);
+                log.setEventValue(eventValue);
+                logs.add(log);
+            }
+        }
+
+        public ArrayList<Log> getLogs() {
+            return logs;
         }
 
         public void addPlayer(Player player) {
@@ -337,36 +408,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static class Event extends DAO {
-        public static final String TABLE_NAME = Event.class.getSimpleName();
-        public static final String COLUMN_ID = "id";
-        public static final String COLUMN_NAME = "name";
-        public static final String[] ALL_COLUMNS = {
-                COLUMN_ID, COLUMN_NAME
-        };
+    public static class Event {
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + Event.class.getSimpleName() + " ( "
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_NAME + " TEXT NOT NULL );";
+        public static final String GO_MONEY_EVENT = "go_money_event";
+        public static final String DOUBLE_GO_MONEY_EVENT = "double_go_money_event";
+        public static final String PAY_RENT_EVENT = "pay_rent_event";
+        public static final String SINGLE_TRANSFER_EVENT = "single_transfer_event";
+        public static final String MULTIPLE_TRANSFER_EVENT = "multiple_transfer_event";
+        public static final String MANAGE_ADD_MONEY_EVENT = "manage_add_money_event";
+        public static final String MANAGE_SUBTRACT_MONEY_EVENT = "manage_subtract_money_event";
 
-        private String name;
+        private static final SparseArray<String> EVENT_IDENTIFIERS =
+                new SparseArray<>();
 
-        public Event(long id) {
-            super(id);
+        static {
+            EVENT_IDENTIFIERS.put(0, GO_MONEY_EVENT);
+            EVENT_IDENTIFIERS.put(1, DOUBLE_GO_MONEY_EVENT);
+            EVENT_IDENTIFIERS.put(2, PAY_RENT_EVENT);
+            EVENT_IDENTIFIERS.put(3, SINGLE_TRANSFER_EVENT);
+            EVENT_IDENTIFIERS.put(4, MULTIPLE_TRANSFER_EVENT);
+            EVENT_IDENTIFIERS.put(5, MANAGE_ADD_MONEY_EVENT);
+            EVENT_IDENTIFIERS.put(6, MANAGE_SUBTRACT_MONEY_EVENT);
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public static int i(String eventIdentifier) {
+            return EVENT_IDENTIFIERS.keyAt(EVENT_IDENTIFIERS.indexOfValue(eventIdentifier));
         }
 
-        public String getName() {
-            return name;
+        public static String n(int eventId) {
+            return EVENT_IDENTIFIERS.valueAt(EVENT_IDENTIFIERS.indexOfKey(eventId));
         }
-
-
     }
 
     public static class Log extends DAO implements Parcelable {
+
+        public static final long NOT_REGISTERED = -1;
 
         public static final String TABLE_NAME = Log.class.getSimpleName();
         public static final String COLUMN_ID = "id";
@@ -384,14 +460,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String CREATE_TABLE = "CREATE TABLE " + Log.class.getSimpleName() + " ( "
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_TIMESTAMP + " INTEGER NOT NULL, "
-                + COLUMN_EVENT_ID + " INTEGER NULL, "
+                + COLUMN_EVENT_ID + " INTEGER NOT NULL, "
                 + COLUMN_GAME_ID + " INTEGER NOT NULL, "
-                + COLUMN_FROM_PLAYER_ID + " INTEGER NOT NULL, "
-                + COLUMN_TO_PLAYER_ID + " INTEGER NOT NULL, "
+                + COLUMN_FROM_PLAYER_ID + " INTEGER NULL, "
+                + COLUMN_TO_PLAYER_ID + " INTEGER NULL, "
                 + COLUMN_EVENT_VALUE + " INTEGER NOT NULL );";
 
         private long timestamp;
-        private long eventId;
+        private int eventId;
         private long gameId;
         private long fromPlayerId;
         private long toPlayerId;
@@ -404,11 +480,86 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         protected Log(Parcel in) {
             super(in.readLong());
             timestamp = in.readLong();
-            eventId = in.readLong();
+            eventId = in.readInt();
             gameId = in.readLong();
             fromPlayerId = in.readLong();
             toPlayerId = in.readLong();
             eventValue = in.readLong();
+        }
+
+        public static String loadLogs(Game game, Context context) {
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+            HashMap<Long, Player> playerNames = new HashMap<>();
+            for(Player player : game.getPlayers()) {
+                playerNames.put(player.getId(), player);
+            }
+
+            StringBuilder logBuilder = new StringBuilder();
+            ArrayList<Log> logs = game.getLogs();
+            for(int i = logs.size() - 1; i >= 0; i--) {
+
+                Log log = logs.get(i);
+                logBuilder.append(Util.convertToLogDate(log.getTimestamp()));
+                logBuilder.append(":");
+                logBuilder.append(System.getProperty("line.separator"));
+
+                String eventName = Event.n(log.getEventId());
+                switch(eventName) {
+                    case Event.GO_MONEY_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_go_money_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                        break;
+                    case Event.DOUBLE_GO_MONEY_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_double_go_money_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                        break;
+                    case Event.PAY_RENT_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_pay_rent_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "")),
+                                playerNames.get(log.getToPlayerId()).getName()));
+                        break;
+                    case Event.SINGLE_TRANSFER_EVENT:
+                    case Event.MULTIPLE_TRANSFER_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_transfer_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "")),
+                                playerNames.get(log.getToPlayerId()).getName()));
+                        break;
+                    case Event.MANAGE_ADD_MONEY_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_manage_add_money_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                        break;
+                    case Event.MANAGE_SUBTRACT_MONEY_EVENT:
+                        logBuilder.append(String.format(
+                                context.getString(R.string.game_log_manage_subtract_money_event),
+                                playerNames.get(log.getFromPlayerId()).getName(),
+                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
+                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                        break;
+                }
+                logBuilder.append(System.getProperty("line.separator"));
+            }
+            return logBuilder.toString();
+        }
+
+        public void setId(long id) {
+            this.id = id;
         }
 
         public long getTimestamp() {
@@ -419,11 +570,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.timestamp = timestamp;
         }
 
-        public long getEventId() {
+        public int getEventId() {
             return eventId;
         }
 
-        public void setEventId(long eventId) {
+        public void setEventId(int eventId) {
             this.eventId = eventId;
         }
 
@@ -459,6 +610,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return eventValue;
         }
 
+        public boolean isRegistered() {
+            return id != NOT_REGISTERED;
+        }
+
         public static final Creator<Log> CREATOR = new Creator<Log>() {
             @Override
             public Log createFromParcel(Parcel in) {
@@ -480,39 +635,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeLong(id);
             dest.writeLong(timestamp);
-            dest.writeLong(eventId);
+            dest.writeInt(eventId);
             dest.writeLong(gameId);
             dest.writeLong(fromPlayerId);
             dest.writeLong(toPlayerId);
             dest.writeLong(eventValue);
         }
+
+
     }
 
 
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(Game.CREATE_TABLE);
-        db.execSQL(Player.CREATE_TABLE);
-        db.execSQL(GamePlayer.CREATE_TABLE);
-        db.execSQL(Log.CREATE_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + Game.CREATE_TABLE);
-        db.execSQL("DROP TABLE " + Player.CREATE_TABLE);
-        db.execSQL("DROP TABLE " + GamePlayer.CREATE_TABLE);
-        db.execSQL("DROP TABLE " + Event.CREATE_TABLE);
-        db.execSQL("DROP TABLE " + Log.CREATE_TABLE);
-        onCreate(db);
-    }
-
-    public static String where(String columnName, long value) {
-        return columnName + " = " + value;
-    }
 
 }

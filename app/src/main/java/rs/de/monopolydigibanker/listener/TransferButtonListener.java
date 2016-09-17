@@ -11,6 +11,7 @@ import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.dialog.PayAmountDialog;
 import rs.de.monopolydigibanker.dialog.PlayerSelectionDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
+import rs.de.monopolydigibanker.util.Util;
 
 public class TransferButtonListener extends ActionButtonListener implements
         PlayerSelectionDialog.OnSelectListener, PayAmountDialog.OnPaymentDoneListener {
@@ -74,7 +75,13 @@ public class TransferButtonListener extends ActionButtonListener implements
     }
 
     @Override
-    public void onPaymentDone() {
+    public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
+        int eventId = (targetPlayers.size() == 1) ? DatabaseHelper.Event.i(DatabaseHelper.Event.SINGLE_TRANSFER_EVENT) :
+                DatabaseHelper.Event.i(DatabaseHelper.Event.MULTIPLE_TRANSFER_EVENT);
+        for(DatabaseHelper.Player targetPlayer : targetPlayers) {
+            game.newLog(eventId, payAmountValue, player.getId(), targetPlayer.getId(),
+                    Util.isLoggingActivated(playerFragment.getContext()));
+        }
         game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
     }
 }

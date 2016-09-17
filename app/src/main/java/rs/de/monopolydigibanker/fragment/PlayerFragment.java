@@ -85,11 +85,11 @@ public class PlayerFragment extends Fragment {
         logTextView = (TextView)view.findViewById(R.id.pf_tv_log);
         logTextView.setMovementMethod(new ScrollingMovementMethod());
 
-        /**
-         * TODO LogView basteln und Datenbank für den Save und Load von Logs vorbereiten
-         *
-         */
-        logTextView.setText(Util.convertToLogDate(System.currentTimeMillis()) + ": Rene hat Marcus, Steffen, Hannes, Marcella 2.500.000$ gezahlt.");
+        if(Util.isLoggingActivated(getContext())) {
+            logTextView.setText(DatabaseHelper.Log.loadLogs(game, getContext()));
+        } else {
+            logTextView.setText(R.string.game_log_disabled_title);
+        }
 
         TextView playerNameTextView = (TextView) view.findViewById(R.id.pf_tv_name);
         playerNameTextView.setText(player.getName());

@@ -12,6 +12,7 @@ import rs.de.monopolydigibanker.dialog.GameAddDialog;
 import rs.de.monopolydigibanker.dialog.PayAmountDialog;
 import rs.de.monopolydigibanker.dialog.PlayerSelectionDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
+import rs.de.monopolydigibanker.util.Util;
 
 
 /**
@@ -79,8 +80,9 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
     }
 
     @Override
-    public void onPaymentDone() {
+    public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
+        game.newLog(DatabaseHelper.Event.i(DatabaseHelper.Event.PAY_RENT_EVENT), payAmountValue, player.getId(),
+                    targetPlayers.get(0).getId(), Util.isLoggingActivated(playerFragment.getContext()));
         game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
     }
-
 }

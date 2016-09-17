@@ -37,7 +37,7 @@ public class GameActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getBundleExtra(GAME_DATA_BUNDLE_KEY);
         long gameId = bundle.getLong(GAME_ID_KEY);
         source.open();
-        game = source.loadGame(gameId);
+        game = source.loadGame(gameId, this);
         source.close();
 
         ActionBar actionBar = getSupportActionBar();

@@ -1,5 +1,8 @@
 package rs.de.monopolydigibanker.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.widget.EditText;
 
@@ -7,6 +10,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
+import rs.de.monopolydigibanker.database.DatabaseHelper;
 
 /**
  * Created by Rene on 05.09.2016.
@@ -33,6 +39,11 @@ public class Util {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(timestamp);
         return DateFormat.format("dd.MM.yyyy HH:mm:ss", calendar).toString();
+    }
+
+    public static boolean isLoggingActivated(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(SettingsPreferenceActivity.SETTING_LOG_ACTIVATED, false);
     }
 
     public static String punctuatedBalance(long balance, String currencyCharacter) {
