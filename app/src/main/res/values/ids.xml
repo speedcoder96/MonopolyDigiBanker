@@ -26,13 +26,5 @@
     <item type="string" name="key_preference_log_activated_flag">preference_log_activated_flag</item>
     <item type="bool" name="value_preference_log_activated_flag">true</item>
 
-    <item type="integer" name="option_main_edit">0</item>
-    <item type="integer" name="option_main_remove">1</item>
-    <item type="integer" name="option_main_share">2</item>
-    <item type="integer" name="option_main_reset">3</item>
-    <item type="integer" name="option_main_export">4</item>
-
-
-
 
 </resources>
