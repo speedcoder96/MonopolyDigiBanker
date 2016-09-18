@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
+import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.util.Util;
 
@@ -115,7 +116,8 @@ public class DatabaseSource {
             ContentValues playerValues = new ContentValues();
             playerValues.put(DatabaseHelper.Player.COLUMN_NAME, playerName);
             playerValues.put(DatabaseHelper.Player.COLUMN_BALANCE,
-                    Long.parseLong(preferences.getString(SettingsPreferenceActivity.SETTING_BALANCE, "0")));
+                    Long.parseLong(preferences.getString(context.getString(R.string.key_preference_default_balance),
+                            context.getString(R.string.value_preference_default_balance))));
             long playerId = database.insert(DatabaseHelper.Player.TABLE_NAME, null, playerValues);
 
             ContentValues gpValues = new ContentValues();

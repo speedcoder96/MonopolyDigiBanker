@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 
@@ -43,7 +44,10 @@ public class Util {
 
     public static boolean isLoggingActivated(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(SettingsPreferenceActivity.SETTING_LOG_ACTIVATED, false);
+        return preferences.getBoolean(
+                context.getString(R.string.key_preference_log_activated_flag),
+                context.getResources().getBoolean(R.bool.value_preference_log_activated_flag)
+        );
     }
 
     public static String punctuatedBalance(long balance, String currencyCharacter) {
@@ -58,6 +62,7 @@ public class Util {
             return -1;
         }
     }
+
 
 
 }

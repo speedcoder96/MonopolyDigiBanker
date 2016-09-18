@@ -5,7 +5,6 @@ import android.preference.PreferenceManager;
 import android.view.View;
 
 import rs.de.monopolydigibanker.R;
-import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.dialog.AcceptDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
@@ -26,10 +25,17 @@ public class GoButtonListener extends ActionButtonListener {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(playerFragment.getContext());
 
-        goMoneyValue = Long.parseLong(preferences.getString(SettingsPreferenceActivity.SETTING_GO_MONEY, "2000000"));
-        goMoneyValueFactor = (preferences.getBoolean(SettingsPreferenceActivity.SETTING_GO_MONEY_FLAG, false)) ? 2 : 1;
+        goMoneyValue = Long.parseLong(preferences.getString(
+                playerFragment.getContext().getString(R.string.key_preference_go_money),
+                playerFragment.getContext().getString(R.string.value_preference_go_money)));
 
-        currencyCharacter = preferences.getString(SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "");
+        goMoneyValueFactor = (preferences.getBoolean(
+                playerFragment.getContext().getString(R.string.key_preference_double_go_flag),
+                playerFragment.getResources().getBoolean(R.bool.value_preference_double_go_flag))) ? 2 : 1;
+
+        currencyCharacter = preferences.getString(
+                playerFragment.getContext().getString(R.string.key_preference_currency),
+                playerFragment.getContext().getString(R.string.value_preference_currency));
     }
 
     @Override
@@ -55,8 +61,8 @@ public class GoButtonListener extends ActionButtonListener {
         goMoneyAcceptDialog.setTitle(R.string.game_go_money_accept_dialog_title);
         goMoneyAcceptDialog.setFormattedMessage(R.string.game_go_money_accept_dialog_message,
                 Util.punctuatedBalance((potentialGoMoneyValue), currencyCharacter), player.getName());
-        goMoneyAcceptDialog.setPositiveButton(R.string.game_go_money_accept_dialog_pos_title);
-        goMoneyAcceptDialog.setNegativeButton(R.string.game_go_money_accept_dialog_neg_title);
+        goMoneyAcceptDialog.setPositiveButton(R.string.game_go_money_accept_dialog_pos_button);
+        goMoneyAcceptDialog.setNegativeButton(R.string.game_go_money_accept_dialog_neg_button);
         goMoneyAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
             @Override
             public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {

@@ -17,8 +17,6 @@ import rs.de.monopolydigibanker.database.DatabaseSource;
  */
 public class GameActivity extends AppCompatActivity {
 
-    public static final String GAME_DATA_BUNDLE_KEY = "gamedata";
-    public static final String GAME_ID_KEY = "gameid";
 
     private DatabaseSource source;
     private DatabaseHelper.Game game;
@@ -34,8 +32,8 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        Bundle bundle = getIntent().getBundleExtra(GAME_DATA_BUNDLE_KEY);
-        long gameId = bundle.getLong(GAME_ID_KEY);
+        Bundle bundle = getIntent().getBundleExtra(getString(R.string.key_all_game_data));
+        long gameId = bundle.getLong(getString(R.string.key_all_game_id));
         source.open();
         game = source.loadGame(gameId, this);
         source.close();
@@ -45,13 +43,13 @@ public class GameActivity extends AppCompatActivity {
             actionBar.setTitle(game.getTitle());
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.ga_vp);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_game);
         if (viewPager != null) {
             playerFragmentPagerAdapter = new PlayerFragmentPagerAdapter(getSupportFragmentManager(), game);
             viewPager.setAdapter(playerFragmentPagerAdapter);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.ga_vp_tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout_game);
         if (tabLayout != null) {
             tabLayout.setupWithViewPager(viewPager);
         }

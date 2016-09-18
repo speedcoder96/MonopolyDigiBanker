@@ -25,8 +25,8 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
     private void setupManagePaymentDialog() {
         managePaymentDialog = new PayAmountDialog(playerFragment.getContext());
         managePaymentDialog.setCurrentPlayer(player);
-        managePaymentDialog.setLowerFactorButton(R.string.game_pay_amount_dialog_factor1, 1000.0f);
-        managePaymentDialog.setHigherFactorButton(R.string.game_pay_amount_dialog_factor2, 1000000.0f);
+        managePaymentDialog.setLowerFactorButton(R.string.all_pay_amount_factor1, 1000.0f);
+        managePaymentDialog.setHigherFactorButton(R.string.all_pay_amount_factor2, 1000000.0f);
         managePaymentDialog.setPaymentDoneListener(this);
     }
 
@@ -36,7 +36,7 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
         addAmountToPlayer = false;
         managePaymentDialog.setAddAmountToPlayer(addAmountToPlayer);
         managePaymentDialog.setDialogTitle(R.string.game_manage_subtract_money_dialog_title);
-        managePaymentDialog.setSubmitButtonTitle(R.string.game_manage_subtract_money_pos_title);
+        managePaymentDialog.setSubmitButtonTitle(R.string.game_manage_subtract_money_pos_button);
         managePaymentDialog.showDialog();
     }
 
@@ -46,7 +46,7 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
         addAmountToPlayer = true;
         managePaymentDialog.setAddAmountToPlayer(addAmountToPlayer);
         managePaymentDialog.setDialogTitle(R.string.game_manage_add_money_dialog_title);
-        managePaymentDialog.setSubmitButtonTitle(R.string.game_manage_add_money_pos_title);
+        managePaymentDialog.setSubmitButtonTitle(R.string.game_manage_add_money_pos_button);
         managePaymentDialog.showDialog();
         return true;
     }
@@ -62,8 +62,9 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
 
     @Override
     public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
-        int eventId = (addAmountToPlayer) ? DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_ADD_MONEY_EVENT) :
-                DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_SUBTRACT_MONEY_EVENT);
+        int eventId = (addAmountToPlayer)
+                ? DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_ADD_MONEY_EVENT)
+                : DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_SUBTRACT_MONEY_EVENT);
         game.newLog(eventId, payAmountValue, player.getId(), Util.isLoggingActivated(playerFragment.getContext()));
         game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
     }

@@ -1,14 +1,12 @@
 package rs.de.monopolydigibanker.listener;
 
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
+
 import android.view.View;
 
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
-import rs.de.monopolydigibanker.dialog.GameAddDialog;
 import rs.de.monopolydigibanker.dialog.PayAmountDialog;
 import rs.de.monopolydigibanker.dialog.PlayerSelectionDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
@@ -35,16 +33,6 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
             playerSelectionDialog.setTitle(R.string.game_rent_transfer_dialog_title);
             playerSelectionDialog.show();
         } else {
-            Snackbar snackbar = Snackbar.make(playerFragment.getActivity().findViewById(android.R.id.content),
-                    R.string.info_player_balance_zero, Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.action_player_balance_zero, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-            snackbar.setActionTextColor(Color.RED);
-            snackbar.show();
             playerFragment.setRentButtonEnabled(false);
         }
 
@@ -59,10 +47,10 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
     @Override
     public void onSelect(ArrayList<DatabaseHelper.Player> targetPlayers) {
         PayAmountDialog payAmountDialog = new PayAmountDialog(playerFragment.getContext());
-        payAmountDialog.setDialogTitle(R.string.game_rent_transfer_dialog_title);
-        payAmountDialog.setLowerFactorButton(R.string.game_pay_amount_dialog_factor1, 1000.0f);
-        payAmountDialog.setHigherFactorButton(R.string.game_pay_amount_dialog_factor2, 1000000.0f);
-        payAmountDialog.setSubmitButtonTitle(R.string.game_rent_amount_dialog_pos_title);
+        payAmountDialog.setDialogTitle(R.string.game_rent_amount_dialog_title);
+        payAmountDialog.setLowerFactorButton(R.string.all_pay_amount_factor1, 1000.0f);
+        payAmountDialog.setHigherFactorButton(R.string.all_pay_amount_factor2, 1000000.0f);
+        payAmountDialog.setSubmitButtonTitle(R.string.game_rent_amount_dialog_pos_button);
         payAmountDialog.setPaymentDoneListener(this);
 
         payAmountDialog.setCurrentPlayer(player);

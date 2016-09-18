@@ -3,15 +3,15 @@
 
     <string name="app_name">Buch App!</string>
 
-    <string name="game_add_dialog_title">New Game</string>
-    <string name="game_add_dialog_pos_title">Done</string>
-    <string name="game_add_dialog_neg_title">Exit</string>
-    <string name="game_add_dialog_game_title">Game Name</string>
-    <string name="game_add_dialog_game_player">Player %1$d</string>
+    <string name="main_game_add_dialog_title">New Game</string>
+    <string name="main_game_add_dialog_pos_button">Done</string>
+    <string name="main_game_add_dialog_neg_button">Exit</string>
+    <string name="main_game_add_dialog_title_hint">Game Name</string>
+    <string name="main_game_add_dialog_player_button">Player %1$d</string>
 
 
     <string name="game_list_options_dialog_title">Options</string>
-    <string-array name="game_list_options_dialog">
+    <string-array name="main_game_item_options">
         <item>Edit</item>
         <item>Delete</item>
         <item>Share</item>
@@ -20,23 +20,23 @@
     </string-array>
 
 
-    <string name="game_list_remove_dialog_title">%1$s delete</string>
-    <string name="game_list_remove_dialog_message">Do you really want to delete \" %1$s \" ?</string>
-    <string name="game_list_remove_dialog_pos_title">Yes</string>
-    <string name="game_list_remove_dialog_neg_title">No</string>
+    <string name="main_game_remove_dialog_title">%1$s delete</string>
+    <string name="main_game_remove_dialog_message">Do you really want to delete \" %1$s \" ?</string>
+    <string name="main_game_remove_dialog_pos_button">Yes</string>
+    <string name="main_game_remove_dialog_neg_button">No</string>
     <string name="game_list_preview_playercount">%1$d Players</string>
 
-    <string name="error_message_game_add_dialog">Issue(s) in inputs! Game Name/Player is not entered!</string>
+    <string name="main_game_add_dialog_error">Issue(s) in inputs! Game Name/Player is not entered!</string>
     <string name="game_rent_transfer_dialog_title">Pay Rent To...</string>
     <string name="game_rent_amount_dialog_title">Rent Amount</string>
-    <string name="game_pay_amount_dialog_factor1">Thousand</string>
-    <string name="game_pay_amount_dialog_factor2">Million</string>
-    <string name="game_rent_amount_dialog_pos_title">Pay</string>
-    <string name="game_transfer_money_dialog_title_amount">Money Transfer (to %1$d Players) </string>
-    <string name="game_transfer_money_dialog_pos_title">Pay</string>
-    <string name="game_transfer_money_dialog_neg_title">Exit</string>
-    <string name="info_game_list_empty">No games available!</string>
-    <string name="action_game_list_empty">New</string>
+    <string name="all_pay_amount_factor1">Thousand</string>
+    <string name="all_pay_amount_factor2">Million</string>
+    <string name="game_rent_amount_dialog_pos_button">Pay</string>
+    <string name="game_transfer_money_dialog_amount_title">Money Transfer (to %1$d Players) </string>
+    <string name="game_transfer_money_dialog_pos_button">Pay</string>
+    <string name="game_transfer_money_dialog_neg_button">Exit</string>
+    <string name="main_info_game_list_empty">No games available!</string>
+    <string name="main_action_game_list_empty">New</string>
     <string name="menu_item_settings_title">Settings</string>
     <string name="activity_settings_name">Settings</string>
     <string name="preference_go_money_title">Go! Money</string>
@@ -50,26 +50,26 @@
     <string name="action_player_balance_zero">Manage</string>
     <string name="info_player_balance_zero">No balance left to pay anything!</string>
     <string name="game_go_money_accept_dialog_message">Do you want to add %1$s to %2$s balance?</string>
-    <string name="game_go_money_accept_dialog_pos_title">Yes</string>
-    <string name="game_go_money_accept_dialog_neg_title">No</string>
+    <string name="game_go_money_accept_dialog_pos_button">Yes</string>
+    <string name="game_go_money_accept_dialog_neg_button">No</string>
     <string name="game_go_money_accept_dialog_title">Go! Money</string>
     <string name="game_transfer_money_dialog_title">Money Transfer</string>
     <string name="menu_item_remove_player_title">Remove Player</string>
-    <string name="game_edit_dialog_title">Editor (%1$s)</string>
-    <string name="game_edit_dialog_pos_title">Save</string>
-    <string name="game_edit_dialog_neg_title">Exit</string>
-    <string name="game_edit_dialog_remove_title">Remove Player</string>
-    <string name="game_edit_dialog_remove_message">Do you want to remove %1$s from %2$s ?</string>
-    <string name="game_edit_dialog_remove_pos">Yes</string>
-    <string name="game_edit_dialog_remove_neg">No</string>
+    <string name="main_game_edit_dialog_title">Editor (%1$s)</string>
+    <string name="main_game_edit_pos_button">Save</string>
+    <string name="main_game_edit_neg_button">Exit</string>
+    <string name="main_game_edit_dialog_remove_title">Remove Player</string>
+    <string name="main_game_edit_dialog_remove_message">Do you want to remove %1$s from %2$s ?</string>
+    <string name="main_game_edit_dialog_remove_pos_button">Yes</string>
+    <string name="main_game_edit_dialog_remove_neg_button">No</string>
     <string name="game_manage_add_money_dialog_title">Money Management (+)</string>
     <string name="game_manage_subtract_money_dialog_title">Money Management (-)</string>
-    <string name="game_manage_add_money_pos_title">+</string>
-    <string name="game_manage_subtract_money_pos_title">-</string>
-    <string name="game_reset_dialog_title">Reset Game</string>
-    <string name="game_reset_dialog_message">Do you want to reset %1$s ? All players will start with the default balance of %2$s .</string>
-    <string name="game_reset_dialog_pos_title">Yes</string>
-    <string name="game_reset_dialog_neg_title">No</string>
+    <string name="game_manage_add_money_pos_button">+</string>
+    <string name="game_manage_subtract_money_pos_button">-</string>
+    <string name="main_game_reset_dialog_title">Reset Game</string>
+    <string name="main_game_reset_dialog_message">Do you want to reset %1$s ? All players will start with the default balance of %2$s .</string>
+    <string name="main_game_reset_dialog_pos_button">Yes</string>
+    <string name="main_game_reset_dialog_neg_button">No</string>
     <string name="preference_category_balance_title">Balance Settings</string>
     <string name="preference_category_balance_summary">Settings for default balance and GO! money values</string>
     <string name="preference_category_game_title">Game Settings</string>
@@ -82,6 +82,7 @@
     <string name="game_log_manage_add_money_event">%1$s added %2$s to its account balance</string>
     <string name="game_log_manage_subtract_money_event">%1$s subtracted %2$s of its account</string>
     <string name="game_log_new_balance">%1$s has a new balance of %2$s</string>
-    <string name="game_log_disabled_title">Logging deactivated</string>
+    <string name="game_log_disabled">Logging deactivated</string>
+    <string name="game_no_log_available">No logs available</string>
 
 </resources>

@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="game_title_key"/>
-    <item type="id" name="game_id_key"/>
-    <item type="id" name="ged_ibtn_player_remove_tag"/>
-    <item type="id" name="ged_ibtn_player_remove_view"/>
-    <item type="id" name="ged_et_player_name_tag"/>
+    <item type="id" name="tag_all_game_title"/>
+    <item type="id" name="tag_all_game_id"/>
+    <item type="id" name="tag_player_remove_button"/>
+    <item type="id" name="tag_player_remove_view"/>
+    <item type="id" name="tag_player_remove_name"/>
+
+    <item type="string" name="key_all_game_title">game_title</item>
+    <item type="string" name="key_all_game_id">game_id</item>
+    <item type="string" name="key_all_game_data">game_data</item>
+    <item type="string" name="key_all_player_data">player_data</item>
+
+    <item type="string" name="key_preference_default_balance">preference_default_balance</item>
+    <item type="string" name="value_preference_default_balance">15000000</item>
+
+    <item type="string" name="key_preference_go_money">preference_go_money</item>
+    <item type="string" name="value_preference_go_money">2000000</item>
+
+    <item type="string" name="key_preference_double_go_flag">preference_double_go_flag</item>
+    <item type="bool" name="value_preference_double_go_flag">true</item>
+
+    <item type="string" name="key_preference_currency">preference_currency</item>
+    <item type="string" name="value_preference_currency">€</item>
+
+    <item type="string" name="key_preference_log_activated_flag">preference_log_activated_flag</item>
+    <item type="bool" name="value_preference_log_activated_flag">true</item>
+
+    <item type="integer" name="option_main_edit">0</item>
+    <item type="integer" name="option_main_remove">1</item>
+    <item type="integer" name="option_main_share">2</item>
+    <item type="integer" name="option_main_reset">3</item>
+    <item type="integer" name="option_main_export">4</item>
+
+
+
 
 </resources>

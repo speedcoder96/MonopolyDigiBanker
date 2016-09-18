@@ -3,16 +3,9 @@ package rs.de.monopolydigibanker.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.Layout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import rs.de.monopolydigibanker.R;
 
 
 /**
@@ -22,14 +15,12 @@ public class OptionsDialog  implements DialogInterface.OnClickListener {
 
     private Bundle data;
 
-    private Context context;
     private AlertDialog.Builder optionsDialogBuilder;
     private LinearLayout linearLayout;
 
     private OnOptionSelectionListener optionSelectionListener;
 
     public OptionsDialog(Context context) {
-        this.context = context;
         optionsDialogBuilder = new AlertDialog.Builder(context);
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -39,10 +30,6 @@ public class OptionsDialog  implements DialogInterface.OnClickListener {
 
     public void setTitle(int titleId) {
         optionsDialogBuilder.setTitle(titleId);
-    }
-
-    public void setItems(String[] items) {
-        optionsDialogBuilder.setItems(items, this);
     }
 
     public void setItems(int itemsId) {

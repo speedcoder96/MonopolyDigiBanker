@@ -69,26 +69,26 @@ public class GameListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.game_list_item_layout, parent, false);
+            convertView = layoutInflater.inflate(R.layout.item_gamelist, parent, false);
         }
 
         DatabaseHelper.Game.ListItem listItem = listItems.get(position);
 
-        convertView.setTag(R.id.game_id_key, listItem.getId());
-        convertView.setTag(R.id.game_title_key, listItem.getTitle());
+        convertView.setTag(R.id.tag_all_game_id, listItem.getId());
+        convertView.setTag(R.id.tag_all_game_title, listItem.getTitle());
 
         convertView.setOnClickListener(activity);
         convertView.setOnLongClickListener(activity);
 
 
-        TextView gameTitleTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_title);
+        TextView gameTitleTextView = (TextView)convertView.findViewById(R.id.textview_main_game_list_title);
         gameTitleTextView.setText(listItem.getTitle());
 
-        TextView playerCountTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_player_count);
+        TextView playerCountTextView = (TextView)convertView.findViewById(R.id.textview_main_game_list_playercount);
         playerCountTextView.setText(String.format(activity.getString(R.string.game_list_preview_playercount),
                 listItem.getPlayerCount()));
 
-        TextView timestampTextView = (TextView)convertView.findViewById(R.id.ma_tv_listitem_timestamp);
+        TextView timestampTextView = (TextView)convertView.findViewById(R.id.textview_main_game_list_timestamp);
         timestampTextView.setText(Util.convertToDate(listItem.getTimestamp()));
 
         return convertView;

@@ -37,19 +37,19 @@ public class GameAddDialog extends AlertDialog implements DialogInterface.OnClic
 
         this.submitListener = mainActivity;
 
-        setTitle(R.string.game_add_dialog_title);
+        setTitle(R.string.main_game_add_dialog_title);
         setCancelable(true);
 
-        setButton(AlertDialog.BUTTON_POSITIVE, getContext().getString(R.string.game_add_dialog_pos_title), this);
-        setButton(AlertDialog.BUTTON_NEGATIVE, getContext().getString(R.string.game_add_dialog_neg_title), this);
-        setButton(AlertDialog.BUTTON_NEUTRAL, getContext().getString(R.string.game_add_dialog_game_player), this);
+        setButton(AlertDialog.BUTTON_POSITIVE, getContext().getString(R.string.main_game_add_dialog_pos_button), this);
+        setButton(AlertDialog.BUTTON_NEGATIVE, getContext().getString(R.string.main_game_add_dialog_neg_button), this);
+        setButton(AlertDialog.BUTTON_NEUTRAL, getContext().getString(R.string.main_game_add_dialog_player_button), this);
 
         inputLinearLayout = new LinearLayout(getContext());
         inputLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         gameTitle = new EditText(getContext());
         gameTitle.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
-        gameTitle.setHint(R.string.game_add_dialog_game_title);
+        gameTitle.setHint(R.string.main_game_add_dialog_title_hint);
         inputLinearLayout.addView(gameTitle);
 
         setView(inputLinearLayout);
@@ -59,7 +59,7 @@ public class GameAddDialog extends AlertDialog implements DialogInterface.OnClic
         show();
 
         neutralButton = getButton(AlertDialog.BUTTON_NEUTRAL);
-        neutralButton.setText(String.format(getContext().getString(R.string.game_add_dialog_game_player), players.size() + 1));
+        neutralButton.setText(String.format(getContext().getString(R.string.main_game_add_dialog_player_button), players.size() + 1));
         neutralButton.setOnClickListener(new NeutralButtonListener());
 
         positiveButton = getButton(AlertDialog.BUTTON_POSITIVE);
@@ -75,10 +75,10 @@ public class GameAddDialog extends AlertDialog implements DialogInterface.OnClic
         EditText playerEditText = new EditText(getContext());
         playerEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
         players.add(playerEditText);
-        playerEditText.setHint(String.format(getContext().getString(R.string.game_add_dialog_game_player), players.size()));
+        playerEditText.setHint(String.format(getContext().getString(R.string.main_game_add_dialog_player_button), players.size()));
         inputLinearLayout.addView(playerEditText);
 
-        neutralButton.setText(String.format(getContext().getString(R.string.game_add_dialog_game_player), players.size() + 1));
+        neutralButton.setText(String.format(getContext().getString(R.string.main_game_add_dialog_player_button), players.size() + 1));
 
         if(players.size() == MAX_PLAYER_COUNT) {
             neutralButton.setVisibility(View.GONE);
@@ -136,7 +136,7 @@ public class GameAddDialog extends AlertDialog implements DialogInterface.OnClic
                 }
                 dismiss();
             } else {
-                Toast.makeText(getContext(), R.string.error_message_game_add_dialog, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.main_game_add_dialog_error, Toast.LENGTH_LONG).show();
             }
         }
     }

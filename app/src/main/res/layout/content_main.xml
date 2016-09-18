@@ -13,7 +13,7 @@
     tools:showIn="@layout/activity_main">
 
     <ListView
-        android:id="@+id/ma_lv_games"
+        android:id="@+id/listview_main_games"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

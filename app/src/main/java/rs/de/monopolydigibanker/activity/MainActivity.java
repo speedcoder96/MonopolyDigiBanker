@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity implements
         OptionsDialog.OnOptionSelectionListener,
         GameEditDialog.OnEditDoneListener {
 
-    public static final int OPTION_EDIT = 0;
-    public static final int OPTION_REMOVE = 1;
-    public static final int OPTION_SHARE = 2;
-    public static final int OPTION_RESET = 3;
-    public static final int OPTION_EXPORT = 4;
+    private static final int OPTION_EDIT = 0;
+    private static final int OPTION_REMOVE = 1;
+    private static final int OPTION_SHARE = 2;
+    private static final int OPTION_RESET = 3;
+    private static final int OPTION_EXPORT = 4;
 
     private GameListViewAdapter gameListViewAdapter;
 
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ma_tb_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        ListView gamesListView = (ListView)findViewById(R.id.ma_lv_games);
+        ListView gamesListView = (ListView)findViewById(R.id.listview_main_games);
         gameListViewAdapter = new GameListViewAdapter(this);
         gamesListView.setAdapter(gameListViewAdapter);
 
-        FloatingActionButton gamesAddFab = (FloatingActionButton) findViewById(R.id.ma_fbtn_add);
+        FloatingActionButton gamesAddFab = (FloatingActionButton) findViewById(R.id.fab_main_add);
         gamesAddFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,14 +66,14 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_settings_menu, menu);
+        getMenuInflater().inflate(R.menu.main_settings, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.ma_mitem_settings:
+            case R.id.item_main_settings:
                 Intent settingsIntent = new Intent(this, SettingsPreferenceActivity.class);
                 startActivity(settingsIntent);
                 break;
@@ -84,23 +84,24 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        long gameId = Long.parseLong(v.getTag(R.id.game_id_key).toString());
+        long gameId = Long.parseLong(v.getTag(R.id.tag_all_game_id).toString());
         startGame(gameId);
     }
 
 
     @Override
     public boolean onLongClick(View v) {
-        long gameId = Long.parseLong(v.getTag(R.id.game_id_key).toString());
-        String gameTitle = v.getTag(R.id.game_title_key).toString();
+        long gameId = Long.parseLong(v.getTag(R.id.tag_all_game_id).toString());
+        String gameTitle = v.getTag(R.id.tag_all_game_title).toString();
+
         Bundle data = new Bundle();
-        data.putLong("game_id", gameId);
-        data.putString("game_title", gameTitle);
+        data.putLong(getString(R.string.key_all_game_id), gameId);
+        data.putString(getString(R.string.key_all_game_title), gameTitle);
 
         OptionsDialog optionsDialog = new OptionsDialog(this);
         optionsDialog.setData(data);
         optionsDialog.setTitle(R.string.game_list_options_dialog_title);
-        optionsDialog.setItems(R.array.game_list_options_dialog);
+        optionsDialog.setItems(R.array.main_game_item_options);
         optionsDialog.setOptionSelectionListener(this);
         optionsDialog.show();
 
@@ -125,21 +126,30 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onSelect(DialogInterface dialog, Bundle data, int option) {
-        long gameId = data.getLong("game_id");
-        String gameTitle = data.getString("game_title");
+        long gameId = data.getLong(getString(R.string.key_all_game_id));
+        String gameTitle = data.getString(getString(R.string.key_all_game_title));
+
         switch(option) {
+            /**
+             * OPTION EDIT: The option of editing the games title and manage its players.
+             */
             case OPTION_EDIT:
+
                 GameEditDialog editDialog = new GameEditDialog(this, data);
                 editDialog.setEditDoneListener(this);
                 editDialog.show();
                 break;
+            /**
+             * OPTION REMOVE: The option of removing the game from the database.
+             */
             case OPTION_REMOVE:
+
                 AcceptDialog removeGameAcceptDialog = new AcceptDialog(this);
                 removeGameAcceptDialog.putData(0, gameId);
-                removeGameAcceptDialog.setFormattedTitle(R.string.game_list_remove_dialog_title, gameTitle);
-                removeGameAcceptDialog.setFormattedMessage(R.string.game_list_remove_dialog_message, gameTitle);
-                removeGameAcceptDialog.setPositiveButton(R.string.game_list_remove_dialog_pos_title);
-                removeGameAcceptDialog.setNegativeButton(R.string.game_list_remove_dialog_neg_title);
+                removeGameAcceptDialog.setFormattedTitle(R.string.main_game_remove_dialog_title, gameTitle);
+                removeGameAcceptDialog.setFormattedMessage(R.string.main_game_remove_dialog_message, gameTitle);
+                removeGameAcceptDialog.setPositiveButton(R.string.main_game_remove_dialog_pos_button);
+                removeGameAcceptDialog.setNegativeButton(R.string.main_game_remove_dialog_neg_button);
                 removeGameAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
 
                     @Override
@@ -154,20 +164,32 @@ public class MainActivity extends AppCompatActivity implements
                 });
                 removeGameAcceptDialog.show();
                 break;
+            /**
+             * OPTION SHARE: The option of sharing the game via bluetooth to another device.
+             */
             case OPTION_SHARE:
+
                 Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
                 break;
+            /**
+             * OPTION RESET: The option of resetting the games state to the current set setting values.
+             */
             case OPTION_RESET:
+
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                long defaultBalance = Long.parseLong(preferences.getString("preference_default_balance_key", "0"));
+                long defaultBalance = Long.parseLong(preferences.getString(
+                        getString(R.string.key_preference_default_balance),
+                        getString(R.string.value_preference_default_balance)));
                 AcceptDialog resetGameAcceptDialog = new AcceptDialog(this);
                 resetGameAcceptDialog.putData(0, gameId);
                 resetGameAcceptDialog.putData(1, defaultBalance);
-                resetGameAcceptDialog.setTitle(R.string.game_reset_dialog_title);
-                resetGameAcceptDialog.setFormattedMessage(R.string.game_reset_dialog_message,
-                        gameTitle, Util.punctuatedBalance(defaultBalance, preferences.getString("preference_currency_key", "")));
-                resetGameAcceptDialog.setPositiveButton(R.string.game_reset_dialog_pos_title);
-                resetGameAcceptDialog.setNegativeButton(R.string.game_reset_dialog_neg_title);
+                resetGameAcceptDialog.setTitle(R.string.main_game_reset_dialog_title);
+                resetGameAcceptDialog.setFormattedMessage(
+                        R.string.main_game_reset_dialog_message, gameTitle, Util.punctuatedBalance(defaultBalance,
+                                preferences.getString(getString(R.string.key_preference_currency),
+                                        getString(R.string.value_preference_currency))));
+                resetGameAcceptDialog.setPositiveButton(R.string.main_game_reset_dialog_pos_button);
+                resetGameAcceptDialog.setNegativeButton(R.string.main_game_reset_dialog_neg_button);
                 resetGameAcceptDialog.setAcceptDialogListener(new AcceptDialog.OnAcceptDialogListener() {
                     @Override
                     public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
@@ -184,7 +206,11 @@ public class MainActivity extends AppCompatActivity implements
                 });
                 resetGameAcceptDialog.show();
                 break;
+            /**
+             * OPTION EXPORT: The option of exporting the game to a special file for exchange.
+             */
             case OPTION_EXPORT:
+
                 Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
                 break;
         }
@@ -193,8 +219,8 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onEmptyGameList() {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                R.string.info_game_list_empty, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.action_game_list_empty, new View.OnClickListener() {
+                R.string.main_info_game_list_empty, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.main_action_game_list_empty, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new GameAddDialog(MainActivity.this);
@@ -207,8 +233,8 @@ public class MainActivity extends AppCompatActivity implements
     private void startGame(long gameId) {
         Intent intent = new Intent(this, GameActivity.class);
         Bundle gameData = new Bundle();
-        gameData.putLong(GameActivity.GAME_ID_KEY, gameId);
-        intent.putExtra(GameActivity.GAME_DATA_BUNDLE_KEY, gameData);
+        gameData.putLong(getString(R.string.key_all_game_id), gameId);
+        intent.putExtra(getString(R.string.key_all_game_data), gameData);
         startActivity(intent);
     }
 

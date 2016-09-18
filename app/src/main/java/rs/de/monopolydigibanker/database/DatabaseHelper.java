@@ -191,6 +191,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return logs;
         }
 
+        public boolean hasLogs() {
+            return logs.size() > 0;
+        }
+
         public void addPlayer(Player player) {
             players.add(player);
         }
@@ -511,22 +515,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         logBuilder.append(String.format(
                                 context.getString(R.string.game_log_go_money_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
-                                Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                                Util.punctuatedBalance(log.getEventValue(),
+                                        preferences.getString(
+                                                context.getString(R.string.key_preference_currency),
+                                                context.getString(R.string.value_preference_currency)))));
                         break;
                     case Event.DOUBLE_GO_MONEY_EVENT:
                         logBuilder.append(String.format(
                                 context.getString(R.string.game_log_double_go_money_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
                                 Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                                        context.getString(R.string.key_preference_currency),
+                                        context.getString(R.string.value_preference_currency)))));
                         break;
                     case Event.PAY_RENT_EVENT:
                         logBuilder.append(String.format(
                                 context.getString(R.string.game_log_pay_rent_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
                                 Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "")),
+                                        context.getString(R.string.key_preference_currency),
+                                        context.getString(R.string.value_preference_currency))),
                                 playerNames.get(log.getToPlayerId()).getName()));
                         break;
                     case Event.SINGLE_TRANSFER_EVENT:
@@ -535,7 +543,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 context.getString(R.string.game_log_transfer_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
                                 Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, "")),
+                                        context.getString(R.string.key_preference_currency),
+                                        context.getString(R.string.value_preference_currency))),
                                 playerNames.get(log.getToPlayerId()).getName()));
                         break;
                     case Event.MANAGE_ADD_MONEY_EVENT:
@@ -543,14 +552,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 context.getString(R.string.game_log_manage_add_money_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
                                 Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                                        context.getString(R.string.key_preference_currency),
+                                        context.getString(R.string.value_preference_currency)))));
                         break;
                     case Event.MANAGE_SUBTRACT_MONEY_EVENT:
                         logBuilder.append(String.format(
                                 context.getString(R.string.game_log_manage_subtract_money_event),
                                 playerNames.get(log.getFromPlayerId()).getName(),
                                 Util.punctuatedBalance(log.getEventValue(), preferences.getString(
-                                        SettingsPreferenceActivity.SETTING_CURRENCY_CHAR, ""))));
+                                        context.getString(R.string.key_preference_currency),
+                                        context.getString(R.string.value_preference_currency)))));
                         break;
                 }
                 logBuilder.append(System.getProperty("line.separator"));

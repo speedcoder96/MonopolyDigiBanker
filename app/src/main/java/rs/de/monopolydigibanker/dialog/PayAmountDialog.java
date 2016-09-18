@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -124,9 +125,8 @@ public class PayAmountDialog extends AlertDialog.Builder {
         public void onClick(View v) {
             String payAmountInput = payAmountEditText.getText().toString();
             if(payAmountInput.length() > 0) {
-                long rentAmount = (long)(Float.parseFloat(payAmountInput) * payFactor);
-                payAmountEditText.setText(String.valueOf(rentAmount));
-
+                long payAmount = (long)(Double.parseDouble(payAmountInput) * payFactor);
+                payAmountEditText.setText(String.valueOf(payAmount));
                 payAmountDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
                 payAmountDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
             }
