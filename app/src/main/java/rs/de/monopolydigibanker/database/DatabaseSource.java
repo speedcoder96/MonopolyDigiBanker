@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.GamePlayer;
+import rs.de.monopolydigibanker.database.model.Log;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.util.Util;
 
 
@@ -102,10 +106,10 @@ public class DatabaseSource {
          * Stores all attributes of the game including title, creation timestamp and balance flag
          */
         ContentValues gameValues = new ContentValues();
-        gameValues.put(DatabaseHelper.Game.COLUMN_TITLE, gameTitle);
-        gameValues.put(DatabaseHelper.Game.COLUMN_TIMESTAMP, System.currentTimeMillis());
-        gameValues.put(DatabaseHelper.Game.COLUMN_BALANCE_FLAG, 0);
-        long gameId = database.insert(DatabaseHelper.Game.TABLE_NAME, null, gameValues);
+        gameValues.put(Game.COLUMN_TITLE, gameTitle);
+        gameValues.put(Game.COLUMN_TIMESTAMP, System.currentTimeMillis());
+        gameValues.put(Game.COLUMN_BALANCE_FLAG, 0);
+        long gameId = database.insert(Game.TABLE_NAME, null, gameValues);
 
         /**
          * Stores each player including name, start default balance and their connection to
@@ -114,16 +118,16 @@ public class DatabaseSource {
         for(String playerName : playerNames) {
 
             ContentValues playerValues = new ContentValues();
-            playerValues.put(DatabaseHelper.Player.COLUMN_NAME, playerName);
-            playerValues.put(DatabaseHelper.Player.COLUMN_BALANCE,
+            playerValues.put(Player.COLUMN_NAME, playerName);
+            playerValues.put(Player.COLUMN_BALANCE,
                     Long.parseLong(preferences.getString(context.getString(R.string.key_preference_default_balance),
                             context.getString(R.string.value_preference_default_balance))));
-            long playerId = database.insert(DatabaseHelper.Player.TABLE_NAME, null, playerValues);
+            long playerId = database.insert(Player.TABLE_NAME, null, playerValues);
 
             ContentValues gpValues = new ContentValues();
-            gpValues.put(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId);
-            gpValues.put(DatabaseHelper.GamePlayer.COLUMN_PLAYER_ID, playerId);
-            database.insert(DatabaseHelper.GamePlayer.TABLE_NAME, null, gpValues);
+            gpValues.put(GamePlayer.COLUMN_GAME_ID, gameId);
+            gpValues.put(GamePlayer.COLUMN_PLAYER_ID, playerId);
+            database.insert(GamePlayer.TABLE_NAME, null, gpValues);
 
         }
 
@@ -136,34 +140,34 @@ public class DatabaseSource {
      *
      * @param game - the game instance to save
      */
-    public void saveGame(DatabaseHelper.Game game) {
-        ArrayList<DatabaseHelper.Player> players = game.getPlayers();
-        ArrayList<DatabaseHelper.Log> logs = game.getLogs();
+    public void saveGame(Game game) {
+        ArrayList<Player> players = game.getPlayers();
+        ArrayList<Log> logs = game.getLogs();
 
-        for(DatabaseHelper.Player player : players) {
+        for(Player player : players) {
             ContentValues playerData = new ContentValues();
-            playerData.put(DatabaseHelper.Player.COLUMN_BALANCE, player.getBalance());
-            database.update(DatabaseHelper.Player.TABLE_NAME, playerData,
-                    DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, player.getId()), null);
+            playerData.put(Player.COLUMN_BALANCE, player.getBalance());
+            database.update(Player.TABLE_NAME, playerData,
+                    DatabaseHelper.where(Player.COLUMN_ID, player.getId()), null);
 
         }
 
-        for(DatabaseHelper.Log log : logs) {
+        for(Log log : logs) {
             if(!log.isRegistered()) {
                 ContentValues logData = new ContentValues();
-                logData.put(DatabaseHelper.Log.COLUMN_TIMESTAMP, log.getTimestamp());
-                logData.put(DatabaseHelper.Log.COLUMN_EVENT_ID, log.getEventId());
-                logData.put(DatabaseHelper.Log.COLUMN_GAME_ID, log.getGameId());
-                logData.put(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID, log.getFromPlayerId());
-                logData.put(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID, log.getToPlayerId());
-                logData.put(DatabaseHelper.Log.COLUMN_EVENT_VALUE, log.getEventValue());
+                logData.put(Log.COLUMN_TIMESTAMP, log.getTimestamp());
+                logData.put(Log.COLUMN_EVENT_ID, log.getEventId());
+                logData.put(Log.COLUMN_GAME_ID, log.getGameId());
+                logData.put(Log.COLUMN_FROM_PLAYER_ID, log.getFromPlayerId());
+                logData.put(Log.COLUMN_TO_PLAYER_ID, log.getToPlayerId());
+                logData.put(Log.COLUMN_EVENT_VALUE, log.getEventValue());
 
-                long logId = database.insert(DatabaseHelper.Log.TABLE_NAME, null, logData);
+                long logId = database.insert(Log.TABLE_NAME, null, logData);
                 log.setId(logId);
             }
         }
 
-        game.setCurrentStateSaved(DatabaseHelper.Game.STATE_SAVED);
+        game.setCurrentStateSaved(Game.STATE_SAVED);
     }
 
     /**
@@ -173,46 +177,46 @@ public class DatabaseSource {
      * @param gameId - the id to identify the game to load
      * @return the loaded game in a game object instance
      */
-    public DatabaseHelper.Game loadGame(long gameId, Context context) {
+    public Game loadGame(long gameId, Context context) {
 
 
-        DatabaseHelper.Game game = new DatabaseHelper.Game(gameId);
+        Game game = new Game(gameId);
 
 
-        Cursor gameData = database.query(DatabaseHelper.Game.TABLE_NAME,
-                DatabaseHelper.Game.ALL_COLUMNS,
-                DatabaseHelper.where(DatabaseHelper.Game.COLUMN_ID, gameId), null, null, null, null);
+        Cursor gameData = database.query(Game.TABLE_NAME,
+                Game.ALL_COLUMNS,
+                DatabaseHelper.where(Game.COLUMN_ID, gameId), null, null, null, null);
         gameData.moveToFirst(); //important!!! Make sure that a cursor starts at index 0, not -1
 
 
-        game.setTimestamp(gameData.getLong(gameData.getColumnIndex(DatabaseHelper.Game.COLUMN_TIMESTAMP)));
-        game.setTitle(gameData.getString(gameData.getColumnIndex(DatabaseHelper.Game.COLUMN_TITLE)));
-        game.setBalanceFlag(gameData.getLong(gameData.getColumnIndex(DatabaseHelper.Game.COLUMN_BALANCE_FLAG)));
+        game.setTimestamp(gameData.getLong(gameData.getColumnIndex(Game.COLUMN_TIMESTAMP)));
+        game.setTitle(gameData.getString(gameData.getColumnIndex(Game.COLUMN_TITLE)));
+        game.setBalanceFlag(gameData.getLong(gameData.getColumnIndex(Game.COLUMN_BALANCE_FLAG)));
         gameData.close();
 
         if (Util.isLoggingActivated(context)) {
-            Cursor logData = database.query(DatabaseHelper.Log.TABLE_NAME,
-                    DatabaseHelper.Log.ALL_COLUMNS,
-                    DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null, null, null, null);
+            Cursor logData = database.query(Log.TABLE_NAME,
+                    Log.ALL_COLUMNS,
+                    DatabaseHelper.where(Log.COLUMN_GAME_ID, gameId), null, null, null, null);
             logData.moveToFirst();
 
             while(!logData.isAfterLast()) {
-                DatabaseHelper.Log log = new DatabaseHelper.Log(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_ID)));
-                log.setTimestamp(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TIMESTAMP)));
+                Log log = new Log(logData.getLong(logData.getColumnIndex(Log.COLUMN_ID)));
+                log.setTimestamp(logData.getLong(logData.getColumnIndex(Log.COLUMN_TIMESTAMP)));
                 log.setGameId(gameId);
-                log.setEventId(logData.getInt(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_EVENT_ID)));
-                log.setEventValue(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_EVENT_VALUE)));
+                log.setEventId(logData.getInt(logData.getColumnIndex(Log.COLUMN_EVENT_ID)));
+                log.setEventValue(logData.getLong(logData.getColumnIndex(Log.COLUMN_EVENT_VALUE)));
 
-                if(!logData.isNull(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID))) {
-                    log.setFromPlayerId(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_FROM_PLAYER_ID)));
+                if(!logData.isNull(logData.getColumnIndex(Log.COLUMN_FROM_PLAYER_ID))) {
+                    log.setFromPlayerId(logData.getLong(logData.getColumnIndex(Log.COLUMN_FROM_PLAYER_ID)));
                 } else {
-                    log.setFromPlayerId(DatabaseHelper.Log.NOT_REGISTERED);
+                    log.setFromPlayerId(Log.NOT_REGISTERED);
                 }
 
-                if(!logData.isNull(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID))) {
-                    log.setToPlayerId(logData.getLong(logData.getColumnIndex(DatabaseHelper.Log.COLUMN_TO_PLAYER_ID)));
+                if(!logData.isNull(logData.getColumnIndex(Log.COLUMN_TO_PLAYER_ID))) {
+                    log.setToPlayerId(logData.getLong(logData.getColumnIndex(Log.COLUMN_TO_PLAYER_ID)));
                 } else {
-                    log.setToPlayerId(DatabaseHelper.Log.NOT_REGISTERED);
+                    log.setToPlayerId(Log.NOT_REGISTERED);
                 }
 
                 game.addLog(log);
@@ -221,22 +225,22 @@ public class DatabaseSource {
             logData.close();
         }
 
-        Cursor playerList = database.query(DatabaseHelper.GamePlayer.TABLE_NAME,
-                DatabaseHelper.GamePlayer.ALL_COLUMNS,
-                DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
+        Cursor playerList = database.query(GamePlayer.TABLE_NAME,
+                GamePlayer.ALL_COLUMNS,
+                DatabaseHelper.where(GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
         playerList.moveToFirst(); //important!!! Make sure that a cursor starts at index 0, not -1
         while(!playerList.isAfterLast()) {
-            long playerId = playerList.getLong(playerList.getColumnIndex(DatabaseHelper.GamePlayer.COLUMN_PLAYER_ID));
+            long playerId = playerList.getLong(playerList.getColumnIndex(GamePlayer.COLUMN_PLAYER_ID));
 
-            Cursor playerData = database.query(DatabaseHelper.Player.TABLE_NAME,
-                    DatabaseHelper.Player.ALL_COLUMNS,
-                    DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, playerId), null, null, null, null);
+            Cursor playerData = database.query(Player.TABLE_NAME,
+                    Player.ALL_COLUMNS,
+                    DatabaseHelper.where(Player.COLUMN_ID, playerId), null, null, null, null);
             playerData.moveToFirst(); //important!!! Make sure that a cursor starts at index 0, not -1
 
 
-            DatabaseHelper.Player player = new DatabaseHelper.Player(playerId);
-            player.setName(playerData.getString(playerData.getColumnIndex(DatabaseHelper.Player.COLUMN_NAME)));
-            player.setBalance(playerData.getLong(playerData.getColumnIndex(DatabaseHelper.Player.COLUMN_BALANCE)));
+            Player player = new Player(playerId);
+            player.setName(playerData.getString(playerData.getColumnIndex(Player.COLUMN_NAME)));
+            player.setBalance(playerData.getLong(playerData.getColumnIndex(Player.COLUMN_BALANCE)));
 
             game.addPlayer(player);
 
@@ -251,13 +255,13 @@ public class DatabaseSource {
      * Updates the title of the game in database.
      * @param game - the game to update the title of
      */
-    public void updateGameTitle(DatabaseHelper.Game game) {
+    public void updateGameTitle(Game game) {
 
         ContentValues gameData = new ContentValues();
-        gameData.put(DatabaseHelper.Game.COLUMN_TITLE, game.getTitle());
+        gameData.put(Game.COLUMN_TITLE, game.getTitle());
 
-        database.update(DatabaseHelper.Game.TABLE_NAME, gameData,
-                DatabaseHelper.where(DatabaseHelper.Game.COLUMN_ID, game.getId()), null);
+        database.update(Game.TABLE_NAME, gameData,
+                DatabaseHelper.where(Game.COLUMN_ID, game.getId()), null);
     }
 
     /**
@@ -269,29 +273,29 @@ public class DatabaseSource {
     public void removeGame(long gameId) {
 
 
-        Cursor playerList = database.query(DatabaseHelper.GamePlayer.TABLE_NAME,
-                DatabaseHelper.GamePlayer.ALL_COLUMNS,
-                DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
+        Cursor playerList = database.query(GamePlayer.TABLE_NAME,
+                GamePlayer.ALL_COLUMNS,
+                DatabaseHelper.where(GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
         playerList.moveToFirst();
 
 
         while(!playerList.isAfterLast()) {
-            long playerId = playerList.getLong(playerList.getColumnIndex(DatabaseHelper.GamePlayer.COLUMN_PLAYER_ID));
-            database.delete(DatabaseHelper.Player.TABLE_NAME,
-                    DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, playerId), null);
+            long playerId = playerList.getLong(playerList.getColumnIndex(GamePlayer.COLUMN_PLAYER_ID));
+            database.delete(Player.TABLE_NAME,
+                    DatabaseHelper.where(Player.COLUMN_ID, playerId), null);
             playerList.moveToNext();
         }
         playerList.close();
 
 
-        database.delete(DatabaseHelper.GamePlayer.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId), null);
+        database.delete(GamePlayer.TABLE_NAME,
+                DatabaseHelper.where(GamePlayer.COLUMN_GAME_ID, gameId), null);
 
-        database.delete(DatabaseHelper.Game.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.Game.COLUMN_ID, gameId), null);
+        database.delete(Game.TABLE_NAME,
+                DatabaseHelper.where(Game.COLUMN_ID, gameId), null);
 
-        database.delete(DatabaseHelper.Log.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null);
+        database.delete(Log.TABLE_NAME,
+                DatabaseHelper.where(Log.COLUMN_GAME_ID, gameId), null);
 
     }
 
@@ -300,8 +304,8 @@ public class DatabaseSource {
      * @param gameId - the id to identify the game to remove the logs from
      */
     public void removeLogs(long gameId) {
-        database.delete(DatabaseHelper.Log.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.Log.COLUMN_GAME_ID, gameId), null);
+        database.delete(Log.TABLE_NAME,
+                DatabaseHelper.where(Log.COLUMN_GAME_ID, gameId), null);
     }
 
     /**
@@ -309,14 +313,14 @@ public class DatabaseSource {
      *
      * @param player - the player object to update
      */
-    public void updatePlayer(DatabaseHelper.Player player) {
+    public void updatePlayer(Player player) {
 
         ContentValues playerData = new ContentValues();
-        playerData.put(DatabaseHelper.Player.COLUMN_NAME, player.getName());
-        playerData.put(DatabaseHelper.Player.COLUMN_BALANCE, player.getBalance());
+        playerData.put(Player.COLUMN_NAME, player.getName());
+        playerData.put(Player.COLUMN_BALANCE, player.getBalance());
 
-        database.update(DatabaseHelper.Player.TABLE_NAME, playerData,
-                DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, player.getId()), null);
+        database.update(Player.TABLE_NAME, playerData,
+                DatabaseHelper.where(Player.COLUMN_ID, player.getId()), null);
 
     }
 
@@ -327,11 +331,11 @@ public class DatabaseSource {
      */
     public void removePlayer(long playerId) {
 
-        database.delete(DatabaseHelper.GamePlayer.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_PLAYER_ID, playerId), null);
+        database.delete(GamePlayer.TABLE_NAME,
+                DatabaseHelper.where(GamePlayer.COLUMN_PLAYER_ID, playerId), null);
 
-        database.delete(DatabaseHelper.Player.TABLE_NAME,
-                DatabaseHelper.where(DatabaseHelper.Player.COLUMN_ID, playerId), null);
+        database.delete(Player.TABLE_NAME,
+                DatabaseHelper.where(Player.COLUMN_ID, playerId), null);
 
     }
 
@@ -340,7 +344,7 @@ public class DatabaseSource {
      *
      * @param player - the player object instance to remove from database
      */
-    public void removePlayer(DatabaseHelper.Player player) {
+    public void removePlayer(Player player) {
         removePlayer(player.getId());
     }
 
@@ -351,25 +355,25 @@ public class DatabaseSource {
      *
      * @return returns a list of items containing game data to display for preview
      */
-    public ArrayList<DatabaseHelper.Game.ListItem> loadListItems() {
-        ArrayList<DatabaseHelper.Game.ListItem> listItems = new ArrayList<>();
+    public ArrayList<Game.ListItem> loadListItems() {
+        ArrayList<Game.ListItem> listItems = new ArrayList<>();
 
 
-        Cursor gameList = database.query(DatabaseHelper.Game.TABLE_NAME,
-                DatabaseHelper.Game.ALL_COLUMNS, null, null, null, null, DatabaseHelper.Game.COLUMN_TIMESTAMP + " DESC");
+        Cursor gameList = database.query(Game.TABLE_NAME,
+                Game.ALL_COLUMNS, null, null, null, null, Game.COLUMN_TIMESTAMP + " DESC");
         gameList.moveToFirst(); //important!!! Make sure that a cursor starts at index 0, not -1
         while(!gameList.isAfterLast()) {
 
-            long gameId = gameList.getLong(gameList.getColumnIndex(DatabaseHelper.Game.COLUMN_ID));
-            long timestamp = gameList.getLong(gameList.getColumnIndex(DatabaseHelper.Game.COLUMN_TIMESTAMP));
-            String title = gameList.getString(gameList.getColumnIndex(DatabaseHelper.Game.COLUMN_TITLE));
-            DatabaseHelper.Game.ListItem listItem = new DatabaseHelper.Game.ListItem(gameId);
+            long gameId = gameList.getLong(gameList.getColumnIndex(Game.COLUMN_ID));
+            long timestamp = gameList.getLong(gameList.getColumnIndex(Game.COLUMN_TIMESTAMP));
+            String title = gameList.getString(gameList.getColumnIndex(Game.COLUMN_TITLE));
+            Game.ListItem listItem = new Game.ListItem(gameId);
             listItem.setTimestamp(timestamp);
             listItem.setTitle(title);
 
-            Cursor playerCountCursor = database.query(DatabaseHelper.GamePlayer.TABLE_NAME,
-                    new String[]{DatabaseHelper.GamePlayer.COLUMN_GAME_ID},
-                    DatabaseHelper.where(DatabaseHelper.GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
+            Cursor playerCountCursor = database.query(GamePlayer.TABLE_NAME,
+                    new String[]{GamePlayer.COLUMN_GAME_ID},
+                    DatabaseHelper.where(GamePlayer.COLUMN_GAME_ID, gameId), null, null, null, null);
             playerCountCursor.moveToFirst(); //important!!! Make sure that a cursor starts at index 0, not -1
             listItem.setPlayerCount(playerCountCursor.getCount());
             playerCountCursor.close();

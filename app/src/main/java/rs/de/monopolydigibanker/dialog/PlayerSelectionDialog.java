@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog;
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
 
 /**
@@ -17,8 +19,8 @@ public class PlayerSelectionDialog extends AlertDialog.Builder implements Dialog
     private OnSelectListener selectListener;
 
 
-    private DatabaseHelper.Game game;
-    private ArrayList<DatabaseHelper.Player> targetPlayers;
+    private Game game;
+    private ArrayList<Player> targetPlayers;
 
     private String[] otherPlayersNames;
     private long[] otherPlayersIds;
@@ -28,8 +30,8 @@ public class PlayerSelectionDialog extends AlertDialog.Builder implements Dialog
     private int positiveButtonTitleId;
     private int negativeButtonTitleId;
 
-    public PlayerSelectionDialog(PlayerFragment currentPlayerFragment, DatabaseHelper.Game game,
-                                 DatabaseHelper.Player currentPlayer, boolean multiChoice) {
+    public PlayerSelectionDialog(PlayerFragment currentPlayerFragment, Game game,
+                                 Player currentPlayer, boolean multiChoice) {
         super(currentPlayerFragment.getContext());
         this.multiChoice = multiChoice;
 
@@ -91,13 +93,13 @@ public class PlayerSelectionDialog extends AlertDialog.Builder implements Dialog
         }
     }
 
-    private void onSelectEvent(ArrayList<DatabaseHelper.Player> targetPlayers) {
+    private void onSelectEvent(ArrayList<Player> targetPlayers) {
         if(selectListener != null)
             selectListener.onSelect(targetPlayers);
     }
 
     public static interface OnSelectListener {
-        public void onSelect(ArrayList<DatabaseHelper.Player> targetPlayers);
+        public void onSelect(ArrayList<Player> targetPlayers);
     }
 
 

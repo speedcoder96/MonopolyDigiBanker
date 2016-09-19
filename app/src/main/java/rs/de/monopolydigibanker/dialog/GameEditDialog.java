@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 
 /**
  *             2016 created by Rene
@@ -32,7 +34,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
 
     private String gameTitle;
 
-    private DatabaseHelper.Game game;
+    private Game game;
 
     private OnEditDoneListener editDoneListener;
 
@@ -64,8 +66,8 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
 
         itemViews = new ArrayList<>();
 
-        ArrayList<DatabaseHelper.Player> players = game.getPlayers();
-        for(DatabaseHelper.Player player : players) {
+        ArrayList<Player> players = game.getPlayers();
+        for(Player player : players) {
             View itemView = inflater.inflate(R.layout.item_gameeditdialog, linearLayout, false);
 
             EditText playerNameEditText = (EditText) itemView.findViewById(R.id.edittext_gameeditdialog_playername);
@@ -91,7 +93,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
                 for(View itemView : itemViews) {
                     EditText playerNameEditText = (EditText) itemView.findViewById(R.id.edittext_gameeditdialog_playername);
                     if(playerNameEditText.getText().length() > 0) {
-                        DatabaseHelper.Player player = (DatabaseHelper.Player) playerNameEditText.getTag(R.id.tag_player_remove_name);
+                        Player player = (Player) playerNameEditText.getTag(R.id.tag_player_remove_name);
                         player.setName(playerNameEditText.getText().toString());
                         updatePlayer(player);
                     }
@@ -112,7 +114,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
     @Override
     public void onClick(View v) {
         ImageButton playerRemoveImageButton = (ImageButton)v;
-        DatabaseHelper.Player player = (DatabaseHelper.Player)playerRemoveImageButton.getTag(R.id.tag_player_remove_button);
+        Player player = (Player)playerRemoveImageButton.getTag(R.id.tag_player_remove_button);
 
         AcceptDialog removePlayerAcceptDialog = new AcceptDialog(getContext());
         removePlayerAcceptDialog.putData(0, playerRemoveImageButton);
@@ -125,7 +127,7 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
             @Override
             public void onPositive(AcceptDialog.AcceptDialogInterface acceptDialogInterface) {
                 ImageButton playerRemoveImageButton = acceptDialogInterface.getData(0, ImageButton.class);
-                DatabaseHelper.Player player = acceptDialogInterface.getData(1, DatabaseHelper.Player.class);
+                Player player = acceptDialogInterface.getData(1, Player.class);
                 View itemView = (View) playerRemoveImageButton.getTag(R.id.tag_player_remove_view);
                 linearLayout.removeView(itemView);
                 itemViews.remove(itemView);
@@ -141,21 +143,21 @@ public class GameEditDialog extends AlertDialog.Builder implements DialogInterfa
 
     }
 
-    private void updateGame(DatabaseHelper.Game game) {
+    private void updateGame(Game game) {
         DatabaseSource source = DatabaseSource.getInstance(getContext());
         source.open();
         source.updateGameTitle(game);
         source.close();
     }
 
-    private void updatePlayer(DatabaseHelper.Player player) {
+    private void updatePlayer(Player player) {
         DatabaseSource source = DatabaseSource.getInstance(getContext());
         source.open();
         source.updatePlayer(player);
         source.close();
     }
 
-    private void removePlayer(DatabaseHelper.Player player) {
+    private void removePlayer(Player player) {
         DatabaseSource source = DatabaseSource.getInstance(getContext());
         source.open();
         source.removePlayer(player);

@@ -13,6 +13,7 @@ import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.activity.MainActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.database.model.Game;
 import rs.de.monopolydigibanker.util.Util;
 
 /**
@@ -25,7 +26,7 @@ public class GameListViewAdapter extends BaseAdapter {
 
     private DatabaseSource source;
 
-    private ArrayList<DatabaseHelper.Game.ListItem> listItems;
+    private ArrayList<Game.ListItem> listItems;
 
     public GameListViewAdapter(MainActivity activity) {
         this.activity = activity;
@@ -72,7 +73,7 @@ public class GameListViewAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.item_gamelist, parent, false);
         }
 
-        DatabaseHelper.Game.ListItem listItem = listItems.get(position);
+        Game.ListItem listItem = listItems.get(position);
 
         convertView.setTag(R.id.tag_all_game_id, listItem.getId());
         convertView.setTag(R.id.tag_all_game_title, listItem.getTitle());

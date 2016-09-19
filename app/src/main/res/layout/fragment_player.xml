@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/textview_playerfragment_balance"
-        android:background="@drawable/game_balance_textview_rectangle"
+        android:background="@drawable/game_textview_balance_rectangle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -42,7 +42,7 @@
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/game_action_round_button"
                 android:src="@android:drawable/ic_menu_directions" />
 
             <ImageButton
@@ -51,7 +51,7 @@
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/game_action_round_button"
                 android:src="@android:drawable/stat_notify_error" />
 
             <ImageButton
@@ -60,7 +60,7 @@
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/game_action_round_button"
                 android:src="@android:drawable/stat_notify_sync_noanim" />
 
             <ImageButton
@@ -69,14 +69,14 @@
                 android:layout_height="64dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/game_action_round_button"
                 android:src="@android:drawable/checkbox_on_background" />
 
     </GridLayout>
 
     <TextView
         android:id="@+id/textview_playerfragment_logging"
-        android:background="@drawable/game_balance_textview_rectangle"
+        android:background="@drawable/game_textview_balance_rectangle"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

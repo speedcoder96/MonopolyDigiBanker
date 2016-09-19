@@ -3,6 +3,8 @@ package rs.de.monopolydigibanker.listener;
 import android.view.View;
 
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
 
 /**
@@ -12,10 +14,10 @@ public abstract class ActionButtonListener implements View.OnClickListener, View
 
     protected PlayerFragment playerFragment;
 
-    protected DatabaseHelper.Game game;
-    protected DatabaseHelper.Player player;
+    protected Game game;
+    protected Player player;
 
-    public ActionButtonListener(PlayerFragment playerFragment, DatabaseHelper.Game game, DatabaseHelper.Player player) {
+    public ActionButtonListener(PlayerFragment playerFragment, Game game, Player player) {
         this.playerFragment = playerFragment;
 
         this.game = game;

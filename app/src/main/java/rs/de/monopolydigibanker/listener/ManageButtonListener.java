@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Event;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.dialog.PayAmountDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
 import rs.de.monopolydigibanker.util.Util;
@@ -18,7 +21,7 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
     private PayAmountDialog managePaymentDialog;
     private boolean addAmountToPlayer;
 
-    public ManageButtonListener(PlayerFragment playerFragment, DatabaseHelper.Game game, DatabaseHelper.Player player) {
+    public ManageButtonListener(PlayerFragment playerFragment, Game game, Player player) {
         super(playerFragment, game, player);
     }
 
@@ -52,7 +55,7 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
     }
 
     @Override
-    public void onUpdate(DatabaseHelper.Player player) {
+    public void onUpdate(Player player) {
         PlayerFragment fragment = playerFragment.findFragment(player);
         if(fragment != null) {
             fragment.updateFragment();
@@ -61,11 +64,12 @@ public class ManageButtonListener extends ActionButtonListener implements PayAmo
 
 
     @Override
-    public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
+    public void onPaymentDone(Player player, ArrayList<Player> targetPlayers, long payAmountValue) {
         int eventId = (addAmountToPlayer)
-                ? DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_ADD_MONEY_EVENT)
-                : DatabaseHelper.Event.i(DatabaseHelper.Event.MANAGE_SUBTRACT_MONEY_EVENT);
+                ? Event.i(Event.MANAGE_ADD_MONEY_EVENT)
+                : Event.i(Event.MANAGE_SUBTRACT_MONEY_EVENT);
         game.newLog(eventId, payAmountValue, player.getId(), Util.isLoggingActivated(playerFragment.getContext()));
-        game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
+        game.setCurrentStateSaved(Game.STATE_UNSAVED);
     }
+    
 }

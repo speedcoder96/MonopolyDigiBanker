@@ -1,5 +1,6 @@
 package rs.de.monopolydigibanker.fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Log;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.listener.GoButtonListener;
 import rs.de.monopolydigibanker.listener.ManageButtonListener;
 import rs.de.monopolydigibanker.listener.RentButtonListener;
@@ -27,8 +31,8 @@ import rs.de.monopolydigibanker.util.Util;
 public class PlayerFragment extends Fragment {
 
 
-    private DatabaseHelper.Game game;
-    private DatabaseHelper.Player player;
+    private Game game;
+    private Player player;
 
     private ImageButton goButton;
     private ImageButton rentButton;
@@ -37,11 +41,11 @@ public class PlayerFragment extends Fragment {
 
     private TextView logTextView;
 
-    public static PlayerFragment newInstance(DatabaseHelper.Game game, DatabaseHelper.Player player) {
+    public static PlayerFragment newInstance(Context context, Game game, Player player) {
         Bundle args = new Bundle();
         PlayerFragment fragment = new PlayerFragment();
-        args.putParcelable(fragment.getContext().getString(R.string.key_all_game_data), game);
-        args.putParcelable(fragment.getContext().getString(R.string.key_all_player_data), player);
+        args.putParcelable(context.getString(R.string.key_all_game_data), game);
+        args.putParcelable(context.getString(R.string.key_all_player_data), player);
         fragment.setArguments(args);
         return fragment;
     }
@@ -99,7 +103,7 @@ public class PlayerFragment extends Fragment {
     private void loadLogs() {
         if(Util.isLoggingActivated(getContext())) {
             if(game.hasLogs()) {
-                logTextView.setText(DatabaseHelper.Log.loadLogs(game, getContext()));
+                logTextView.setText(Log.loadLogs(game, getContext()));
             } else {
                 logTextView.setText(R.string.game_no_log_available);
             }
@@ -121,10 +125,10 @@ public class PlayerFragment extends Fragment {
 
     }
 
-    public PlayerFragment findFragment(DatabaseHelper.Player targetPlayer) {
+    public PlayerFragment findFragment(Player targetPlayer) {
         Fragment targetFragment = null;
         for(Fragment fragment : getFragmentManager().getFragments()) {
-            DatabaseHelper.Player player = fragment.getArguments().getParcelable(
+            Player player = fragment.getArguments().getParcelable(
                     getContext().getString(R.string.key_all_player_data));
             if(player == targetPlayer) {
                 targetFragment = fragment;

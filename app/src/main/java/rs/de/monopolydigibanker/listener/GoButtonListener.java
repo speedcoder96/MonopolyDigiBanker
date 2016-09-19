@@ -6,6 +6,9 @@ import android.view.View;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Event;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.dialog.AcceptDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
 import rs.de.monopolydigibanker.util.Util;
@@ -20,7 +23,7 @@ public class GoButtonListener extends ActionButtonListener {
 
     private String currencyCharacter;
 
-    public GoButtonListener(PlayerFragment playerFragment, DatabaseHelper.Game game, DatabaseHelper.Player player) {
+    public GoButtonListener(PlayerFragment playerFragment, Game game, Player player) {
        super(playerFragment, game, player);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(playerFragment.getContext());
@@ -40,14 +43,14 @@ public class GoButtonListener extends ActionButtonListener {
 
     @Override
     public void onClick(View v) {
-        payGo(goMoneyValue, DatabaseHelper.Event.i(DatabaseHelper.Event.GO_MONEY_EVENT));
+        payGo(goMoneyValue, Event.i(Event.GO_MONEY_EVENT));
     }
 
     @Override
     public boolean onLongClick(View v) {
         int eventId = (goMoneyValueFactor == 2) ?
-                DatabaseHelper.Event.i(DatabaseHelper.Event.DOUBLE_GO_MONEY_EVENT) :
-                DatabaseHelper.Event.i(DatabaseHelper.Event.GO_MONEY_EVENT);
+                Event.i(Event.DOUBLE_GO_MONEY_EVENT) :
+                Event.i(Event.GO_MONEY_EVENT);
         payGo(goMoneyValue * goMoneyValueFactor, eventId);
         return true;
     }
@@ -71,7 +74,7 @@ public class GoButtonListener extends ActionButtonListener {
                 player.addBalance(potentialGoMoneyValue);
 
                 game.newLog(eventId, potentialGoMoneyValue, player.getId(), Util.isLoggingActivated(playerFragment.getContext()));
-                game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
+                game.setCurrentStateSaved(Game.STATE_UNSAVED);
 
                 playerFragment.updateFragment();
             }

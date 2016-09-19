@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Event;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.dialog.PayAmountDialog;
 import rs.de.monopolydigibanker.dialog.PlayerSelectionDialog;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
@@ -20,7 +23,7 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
         PayAmountDialog.OnPaymentDoneListener {
 
 
-    public RentButtonListener(PlayerFragment playerFragment, DatabaseHelper.Game game, DatabaseHelper.Player player) {
+    public RentButtonListener(PlayerFragment playerFragment, Game game, Player player) {
         super(playerFragment, game, player);
     }
 
@@ -45,7 +48,7 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
 
 
     @Override
-    public void onSelect(ArrayList<DatabaseHelper.Player> targetPlayers) {
+    public void onSelect(ArrayList<Player> targetPlayers) {
         PayAmountDialog payAmountDialog = new PayAmountDialog(playerFragment.getContext());
         payAmountDialog.setDialogTitle(R.string.game_rent_amount_dialog_title);
         payAmountDialog.setLowerFactorButton(R.string.all_pay_amount_factor1, 1000.0f);
@@ -60,7 +63,7 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
     }
 
     @Override
-    public void onUpdate(DatabaseHelper.Player player) {
+    public void onUpdate(Player player) {
         PlayerFragment targetFragment = playerFragment.findFragment(player);
         if(targetFragment != null) {
             targetFragment.updateFragment();
@@ -68,9 +71,9 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
     }
 
     @Override
-    public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
-        game.newLog(DatabaseHelper.Event.i(DatabaseHelper.Event.PAY_RENT_EVENT), payAmountValue, player.getId(),
+    public void onPaymentDone(Player player, ArrayList<Player> targetPlayers, long payAmountValue) {
+        game.newLog(Event.i(Event.PAY_RENT_EVENT), payAmountValue, player.getId(),
                     targetPlayers.get(0).getId(), Util.isLoggingActivated(playerFragment.getContext()));
-        game.setCurrentStateSaved(DatabaseHelper.Game.STATE_UNSAVED);
+        game.setCurrentStateSaved(Game.STATE_UNSAVED);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,12 +17,17 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.adapter.GameListViewAdapter;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.dialog.AcceptDialog;
 import rs.de.monopolydigibanker.dialog.GameAddDialog;
 import rs.de.monopolydigibanker.dialog.GameEditDialog;
@@ -211,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements
              */
             case OPTION_EXPORT:
 
-                Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Export Available", Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -249,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements
     private void resetGame(long gameId, long defaultBalance) {
         DatabaseSource source = DatabaseSource.getInstance(this);
         source.open();
-        DatabaseHelper.Game game = source.loadGame(gameId, this);
-        for(DatabaseHelper.Player player : game.getPlayers()) {
+        Game game = source.loadGame(gameId, this);
+        for(Player player : game.getPlayers()) {
             player.setBalance(defaultBalance);
             source.updatePlayer(player);
         }

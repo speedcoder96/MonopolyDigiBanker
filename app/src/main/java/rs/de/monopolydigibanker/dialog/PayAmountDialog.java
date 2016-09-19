@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.util.Util;
 
 /**
@@ -23,8 +24,8 @@ public class PayAmountDialog extends AlertDialog.Builder {
 
     private EditText payAmountEditText;
 
-    private DatabaseHelper.Player currentPlayer;
-    private ArrayList<DatabaseHelper.Player> targetPlayers;
+    private Player currentPlayer;
+    private ArrayList<Player> targetPlayers;
 
     private float higherPayFactor;
     private float lowerPayFactor;
@@ -48,7 +49,7 @@ public class PayAmountDialog extends AlertDialog.Builder {
         this.paymentDoneListener = paymentDoneListener;
     }
 
-    public void setCurrentPlayer(DatabaseHelper.Player currentPlayer) {
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
@@ -56,7 +57,7 @@ public class PayAmountDialog extends AlertDialog.Builder {
         this.addAmountToPlayer = addAmountToPlayer;
     }
 
-    public void setTargetPlayers(ArrayList<DatabaseHelper.Player> targetPlayers) {
+    public void setTargetPlayers(ArrayList<Player> targetPlayers) {
         this.targetPlayers = targetPlayers;
     }
 
@@ -82,11 +83,11 @@ public class PayAmountDialog extends AlertDialog.Builder {
         this.setPositiveButton(titleId, null);
     }
 
-    public DatabaseHelper.Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public ArrayList<DatabaseHelper.Player> getTargetPlayers() {
+    public ArrayList<Player> getTargetPlayers() {
         return targetPlayers;
     }
 
@@ -153,19 +154,19 @@ public class PayAmountDialog extends AlertDialog.Builder {
         }
 
         private void pay() {
-            DatabaseHelper.Player currentPlayer = payAmountDialog.getCurrentPlayer();
-            ArrayList<DatabaseHelper.Player> targetPlayers = payAmountDialog.getTargetPlayers();
+            Player currentPlayer = payAmountDialog.getCurrentPlayer();
+            ArrayList<Player> targetPlayers = payAmountDialog.getTargetPlayers();
             long payAmount = Util.isValidLongType(payAmountEditText.getText().toString());
             if(payAmount != Util.NO_VALID_LONG) {
                 if(targetPlayers != null && targetPlayers.size() > 0) {
                     payAmount *= targetPlayers.size();
                     if(payAmount <= currentPlayer.getBalance()) {
-                        for(DatabaseHelper.Player targetPlayer : targetPlayers) {
+                        for(Player targetPlayer : targetPlayers) {
                             targetPlayer.addBalance(currentPlayer.subtractBalance(payAmount / targetPlayers.size()));
                         }
                         dialog.dismiss();
                         payAmountDialog.onPaymentDoneEvent(currentPlayer, targetPlayers, payAmount / targetPlayers.size());
-                        for(DatabaseHelper.Player targetPlayer : targetPlayers) {
+                        for(Player targetPlayer : targetPlayers) {
                             payAmountDialog.onUpdateEvent(targetPlayer);
                         }
                         payAmountDialog.onUpdateEvent(currentPlayer);
@@ -196,13 +197,13 @@ public class PayAmountDialog extends AlertDialog.Builder {
 
     }
 
-    public void onUpdateEvent(DatabaseHelper.Player player) {
+    public void onUpdateEvent(Player player) {
         if(paymentDoneListener != null) {
             paymentDoneListener.onUpdate(player);
         }
     }
 
-    public void onPaymentDoneEvent(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue) {
+    public void onPaymentDoneEvent(Player player, ArrayList<Player> targetPlayers, long payAmountValue) {
         if(paymentDoneListener != null) {
             paymentDoneListener.onPaymentDone(player, targetPlayers, payAmountValue);
         }
@@ -211,8 +212,8 @@ public class PayAmountDialog extends AlertDialog.Builder {
 
     public static interface OnPaymentDoneListener {
 
-        public void onUpdate(DatabaseHelper.Player player);
-        public void onPaymentDone(DatabaseHelper.Player player, ArrayList<DatabaseHelper.Player> targetPlayers, long payAmountValue);
+        public void onUpdate(Player player);
+        public void onPaymentDone(Player player, ArrayList<Player> targetPlayers, long payAmountValue);
 
     }
 

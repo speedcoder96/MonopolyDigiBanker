@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="MonopolyBanking" type="Monopoly"/>
+    <xs:element name="MonopolySylt" type="Monopoly"/>
+
+    <xs:complexType name="Monopoly">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="streets" type="StreetList"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StreetList">
+        <xs:sequence>
+            <xs:element name="street" type="Street" minOccurs="0"
+                maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Street">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="plot" type="xs:long"/>
+            <xs:element name="house" type="xs:long"/>
+            <xs:element name="hotel" type="xs:long"/>
+            <xs:element name="mortgage" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RentList">
+        <xs:sequence>
+            <xs:element name="rent" type="xs:long" minOccurs="5" maxOccurs="5"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+</xs:schema>
+

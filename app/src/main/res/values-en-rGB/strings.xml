@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Buch App!</string>
+    <string name="app_name">MonopolyDigiBanker</string>
 
     <string name="main_game_add_dialog_title">New Game</string>
     <string name="main_game_add_dialog_pos_button">Done</string>

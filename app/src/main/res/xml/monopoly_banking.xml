@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MonopolyBanking
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="monopoly_schema.xml">
+
+    <name>Monopoly Banking</name>
+    <StreetList>
+        <Street>
+            <name>CheckPoint Charlie</name>
+            <plot>600.000</plot>
+            <house>500.000</house>
+            <hotel>2.500.000</hotel>
+            <RentList>
+                <rent>0</rent>
+                <rent>0</rent>
+                <rent>0</rent>
+                <rent>0</rent>
+                <rent>0</rent>
+            </RentList>
+        </Street>
+    </StreetList>
+
+</MonopolyBanking>

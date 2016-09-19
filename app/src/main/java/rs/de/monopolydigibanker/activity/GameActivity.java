@@ -11,6 +11,7 @@ import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.adapter.PlayerFragmentPagerAdapter;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
+import rs.de.monopolydigibanker.database.model.Game;
 
 /**
  * Created by Rene on 05.09.2016.
@@ -19,9 +20,6 @@ public class GameActivity extends AppCompatActivity {
 
 
     private DatabaseSource source;
-    private DatabaseHelper.Game game;
-
-    private PlayerFragmentPagerAdapter playerFragmentPagerAdapter;
 
     public GameActivity() {
         source = DatabaseSource.getInstance(this);
@@ -35,7 +33,7 @@ public class GameActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getBundleExtra(getString(R.string.key_all_game_data));
         long gameId = bundle.getLong(getString(R.string.key_all_game_id));
         source.open();
-        game = source.loadGame(gameId, this);
+        Game game = source.loadGame(gameId, this);
         source.close();
 
         ActionBar actionBar = getSupportActionBar();
@@ -45,7 +43,8 @@ public class GameActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_game);
         if (viewPager != null) {
-            playerFragmentPagerAdapter = new PlayerFragmentPagerAdapter(getSupportFragmentManager(), game);
+            PlayerFragmentPagerAdapter playerFragmentPagerAdapter =
+                    new PlayerFragmentPagerAdapter(this, getSupportFragmentManager(), game);
             viewPager.setAdapter(playerFragmentPagerAdapter);
         }
 

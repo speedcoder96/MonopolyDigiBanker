@@ -1,12 +1,15 @@
 package rs.de.monopolydigibanker.adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+
 import java.util.ArrayList;
 
-import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.Game;
+import rs.de.monopolydigibanker.database.model.Player;
 import rs.de.monopolydigibanker.fragment.PlayerFragment;
 
 /**
@@ -14,11 +17,14 @@ import rs.de.monopolydigibanker.fragment.PlayerFragment;
  */
 public class PlayerFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private DatabaseHelper.Game game;
-    private ArrayList<DatabaseHelper.Player> players;
+    private Context context;
 
-    public PlayerFragmentPagerAdapter(FragmentManager fragmentManager, DatabaseHelper.Game game) {
+    private Game game;
+    private ArrayList<Player> players;
+
+    public PlayerFragmentPagerAdapter(Context context, FragmentManager fragmentManager, Game game) {
         super(fragmentManager);
+        this.context = context;
 
         this.game = game;
         this.players = game.getPlayers();
@@ -31,7 +37,7 @@ public class PlayerFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PlayerFragment.newInstance(game, players.get(position));
+        return PlayerFragment.newInstance(context, game, players.get(position));
     }
 
     @Override
