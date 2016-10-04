@@ -230,9 +230,4 @@ public class Log extends DAO implements Parcelable {
         return id != NOT_REGISTERED;
     }
 
-    /**
-     *
-     */
-
-
 }

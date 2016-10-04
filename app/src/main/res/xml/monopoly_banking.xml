@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MonopolyBanking
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="monopoly_schema.xml">
-
-    <name>Monopoly Banking</name>
+<Monopoly
+    xmlns:monopoly="http://www.w3.org/2001/XMLSchema-instance"
+    monopoly:noNamespaceSchemaLocation="monopoly_schema.xml"
+    monopoly:name="Monopoly Banking">
     <StreetList>
-        <Street>
-            <name>CheckPoint Charlie</name>
-            <plot>600.000</plot>
-            <house>500.000</house>
-            <hotel>2.500.000</hotel>
+        <Street
+        monopoly:id="0"
+        monopoly:name="CheckPoint Charlie"
+        monopoly:group_id="0"
+        monopoly:plot_value="600000"
+        monopoly:buildable="true"
+        monopoly:house_cost="500000"
+        monopoly:hotel_cost="2500000"
+        monopoly:mortgage_value="60000">
+        <RentList>
+            <rent>0</rent>
+            <rent>1</rent>
+            <rent>2</rent>
+            <rent>3</rent>
+            <rent>4</rent>
+        </RentList>
+    </Street>
+        <Street
+            monopoly:id="1"
+            monopoly:name="Siegessäule"
+            monopoly:group_id="0"
+            monopoly:plot_value="600000"
+            monopoly:mortgage_value="60000"
+            monopoly:buildable="true"
+            monopoly:house_cost="500000"
+            monopoly:hotel_cost="2500000">
             <RentList>
                 <rent>0</rent>
-                <rent>0</rent>
-                <rent>0</rent>
-                <rent>0</rent>
-                <rent>0</rent>
+                <rent>1</rent>
+                <rent>2</rent>
+                <rent>3</rent>
+                <rent>4</rent>
             </RentList>
         </Street>
     </StreetList>
 
-</MonopolyBanking>
+</Monopoly>

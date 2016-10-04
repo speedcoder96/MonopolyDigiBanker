@@ -6,7 +6,7 @@ package rs.de.monopolydigibanker.database.model;
  * Package:    rs.de.monopolydigibanker.database.model
  * Class:      GamePlayer
  */
-public class GamePlayer {
+public final class GamePlayer {
 
     public static final String TABLE_NAME = GamePlayer.class.getSimpleName();
     public static final String COLUMN_ID = "id";

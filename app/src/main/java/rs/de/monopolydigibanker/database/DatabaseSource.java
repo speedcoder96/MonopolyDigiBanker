@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 
 import rs.de.monopolydigibanker.R;
-import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.model.Game;
 import rs.de.monopolydigibanker.database.model.GamePlayer;
 import rs.de.monopolydigibanker.database.model.Log;

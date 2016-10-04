@@ -45,5 +45,4 @@ public class PlayerFragmentPagerAdapter extends FragmentPagerAdapter {
         return players.get(position).getName();
     }
 
-
 }

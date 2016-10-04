@@ -28,12 +28,16 @@ public class PayAmountDialog extends AlertDialog.Builder {
     private ArrayList<Player> targetPlayers;
 
     private float higherPayFactor;
+    private boolean higherPayFactorEnabled;
     private float lowerPayFactor;
+    private boolean lowerPayFactorEnabled;
 
     private boolean addAmountToPlayer;
 
     public PayAmountDialog(Context context) {
         super(context);
+        higherPayFactorEnabled = true;
+        lowerPayFactorEnabled = true;
 
         payAmountEditText = new EditText(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -95,14 +99,23 @@ public class PayAmountDialog extends AlertDialog.Builder {
         return addAmountToPlayer;
     }
 
+    public void setFixedPayAmountValue(long value) {
+        payAmountEditText.setText(String.valueOf(value));
+        higherPayFactorEnabled = false;
+        lowerPayFactorEnabled = false;
+        payAmountEditText.setEnabled(false);
+    }
+
     public void showDialog() {
         AlertDialog dialog = show();
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(
                 new PayFactorListener(dialog, payAmountEditText, lowerPayFactor)
         );
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(lowerPayFactorEnabled);
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(
                 new PayFactorListener(dialog, payAmountEditText, higherPayFactor)
         );
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(higherPayFactorEnabled);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
                 new PaySubmitListener(dialog, payAmountEditText, this)
         );

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,15 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.adapter.GameListViewAdapter;
-import rs.de.monopolydigibanker.database.DatabaseHelper;
 import rs.de.monopolydigibanker.database.DatabaseSource;
 import rs.de.monopolydigibanker.database.model.Game;
 import rs.de.monopolydigibanker.database.model.Player;
@@ -140,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements
              * OPTION EDIT: The option of editing the games title and manage its players.
              */
             case OPTION_EDIT:
-
                 GameEditDialog editDialog = new GameEditDialog(this, data);
                 editDialog.setEditDoneListener(this);
                 editDialog.show();
@@ -149,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements
              * OPTION REMOVE: The option of removing the game from the database.
              */
             case OPTION_REMOVE:
-
                 AcceptDialog removeGameAcceptDialog = new AcceptDialog(this);
                 removeGameAcceptDialog.putData(0, gameId);
                 removeGameAcceptDialog.setFormattedTitle(R.string.main_game_remove_dialog_title, gameTitle);
@@ -174,14 +165,12 @@ public class MainActivity extends AppCompatActivity implements
              * OPTION SHARE: The option of sharing the game via bluetooth to another device.
              */
             case OPTION_SHARE:
-
                 Toast.makeText(this, "Out of Order, yet!", Toast.LENGTH_LONG).show();
                 break;
             /**
              * OPTION RESET: The option of resetting the games state to the current set setting values.
              */
             case OPTION_RESET:
-
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 long defaultBalance = Long.parseLong(preferences.getString(
                         getString(R.string.key_preference_default_balance),
@@ -216,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements
              * OPTION EXPORT: The option of exporting the game to a special file for exchange.
              */
             case OPTION_EXPORT:
-
                 Toast.makeText(this, "Export Available", Toast.LENGTH_LONG).show();
                 break;
         }

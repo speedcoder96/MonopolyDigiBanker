@@ -11,20 +11,23 @@
     <item type="string" name="key_all_game_data">game_data</item>
     <item type="string" name="key_all_player_data">player_data</item>
 
-    <item type="string" name="key_preference_default_balance">preference_default_balance</item>
+    <item type="string" name="key_preference_default_balance">preference_default_balance_key</item>
     <item type="string" name="value_preference_default_balance">15000000</item>
 
-    <item type="string" name="key_preference_go_money">preference_go_money</item>
+    <item type="string" name="key_preference_go_money">preference_go_money_key</item>
     <item type="string" name="value_preference_go_money">2000000</item>
 
-    <item type="string" name="key_preference_double_go_flag">preference_double_go_flag</item>
+    <item type="string" name="key_preference_double_go_flag">preference_go_flag_key</item>
     <item type="bool" name="value_preference_double_go_flag">true</item>
 
-    <item type="string" name="key_preference_currency">preference_currency</item>
+    <item type="string" name="key_preference_currency">preference_currency_key</item>
     <item type="string" name="value_preference_currency">€</item>
 
-    <item type="string" name="key_preference_log_activated_flag">preference_log_activated_flag</item>
+    <item type="string" name="key_preference_log_activated_flag">preference_log_flag_key</item>
     <item type="bool" name="value_preference_log_activated_flag">true</item>
+
+    <item type="string" name="key_preference_game_schema_selection">preference_game_schema_selection_key</item>
+    <item type="string" name="value_preference_game_schema_selection">0</item>
 
 
 </resources>

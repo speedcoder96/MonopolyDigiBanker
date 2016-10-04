@@ -29,7 +29,6 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
 
     @Override
     public void onClick(View v) {
-
         if(player.getBalance() > 0) {
             PlayerSelectionDialog playerSelectionDialog = new PlayerSelectionDialog(playerFragment, game, player, false);
             playerSelectionDialog.setSelectListener(this);
@@ -38,7 +37,6 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
         } else {
             playerFragment.setRentButtonEnabled(false);
         }
-
     }
 
     @Override
@@ -55,10 +53,8 @@ public class RentButtonListener extends ActionButtonListener implements PlayerSe
         payAmountDialog.setHigherFactorButton(R.string.all_pay_amount_factor2, 1000000.0f);
         payAmountDialog.setSubmitButtonTitle(R.string.game_rent_amount_dialog_pos_button);
         payAmountDialog.setPaymentDoneListener(this);
-
         payAmountDialog.setCurrentPlayer(player);
         payAmountDialog.setTargetPlayers(targetPlayers);
-
         payAmountDialog.showDialog();
     }
 

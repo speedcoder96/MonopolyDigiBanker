@@ -84,5 +84,9 @@
     <string name="game_log_new_balance">%1$s neues Guthaben beträgt %2$s</string>
     <string name="game_log_disabled">Logging ausgeschaltet!</string>
     <string name="game_no_log_available">Keine Logs vorhanden</string>
+    <string name="preference_game_schema_selection_title">Auswahl des Spielschema</string>
+    <string name="preference_game_schema_selection_summary">Wählt ein Schema von einen der vielen Monopoly Varianten aus</string>
+    <string name="preference_game_schema_selection_no_select">Nicht ausgewählt</string>
+    <string name="menu_item_buy_title">Kaufen</string>
 
 </resources>

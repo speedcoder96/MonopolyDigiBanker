@@ -84,5 +84,9 @@
     <string name="game_log_new_balance">%1$s has a new balance of %2$s</string>
     <string name="game_log_disabled">Logging deactivated</string>
     <string name="game_no_log_available">No logs available</string>
+    <string name="preference_game_schema_selection_title">Game Schema Selection</string>
+    <string name="preference_game_schema_selection_summary">Selects a game schema from one of the different real board game versions</string>
+    <string name="preference_game_schema_selection_no_select">Not selected</string>
+    <string name="menu_item_buy_title">Buy</string>
 
 </resources>

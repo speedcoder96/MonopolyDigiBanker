@@ -2,14 +2,11 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:element name="MonopolyBanking" type="Monopoly"/>
-    <xs:element name="MonopolySylt" type="Monopoly"/>
-
     <xs:complexType name="Monopoly">
         <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
             <xs:element name="streets" type="StreetList"/>
         </xs:sequence>
+        <xs:attribute name="name" type="xs:string" />
     </xs:complexType>
 
     <xs:complexType name="StreetList">
@@ -19,22 +16,24 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="Street">
-        <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="plot" type="xs:long"/>
-            <xs:element name="house" type="xs:long"/>
-            <xs:element name="hotel" type="xs:long"/>
-            <xs:element name="mortgage" type="xs:long"/>
-        </xs:sequence>
-    </xs:complexType>
-
     <xs:complexType name="RentList">
         <xs:sequence>
-            <xs:element name="rent" type="xs:long" minOccurs="5" maxOccurs="5"/>
+            <xs:element name="rent" type="xs:long" minOccurs="0" maxOccurs="5"/>
         </xs:sequence>
     </xs:complexType>
 
-
+    <xs:complexType name="Street">
+        <xs:sequence>
+            <xs:element name="rent" type="RentList" minOccurs="5" maxOccurs="5"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="group_id" type="xs:integer"/>
+        <xs:attribute name="plot_value" type="xs:long"/>
+        <xs:attribute name="buildable" type="xs:boolean"/>
+        <xs:attribute name="house_cost" type="xs:long"/>
+        <xs:attribute name="hotel_cost" type="xs:long"/>
+        <xs:attribute name="mortgage_value" type="xs:long"/>
+    </xs:complexType>
 </xs:schema>
 

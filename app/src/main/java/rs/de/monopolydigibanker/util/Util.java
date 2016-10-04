@@ -21,6 +21,7 @@ import java.util.Locale;
 import rs.de.monopolydigibanker.R;
 import rs.de.monopolydigibanker.activity.SettingsPreferenceActivity;
 import rs.de.monopolydigibanker.database.DatabaseHelper;
+import rs.de.monopolydigibanker.database.model.MonopolyStreet;
 
 /**
  * Created by Rene on 05.09.2016.
